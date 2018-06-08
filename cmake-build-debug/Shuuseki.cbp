@@ -82,6 +82,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/Hybin/CLionProjects/Shuuseki/include/Corpus.h">
+			<Option target="Shuuseki"/>
+		</Unit>
 		<Unit filename="/Users/Hybin/CLionProjects/Shuuseki/main.cpp">
 			<Option target="Shuuseki"/>
 		</Unit>

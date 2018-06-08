@@ -6,7 +6,19 @@
 
 #IncludeRegexTransform: 
 
+/Users/Hybin/CLionProjects/Shuuseki/include/Corpus.h
+string
+-
+vector
+-
+
 /Users/Hybin/CLionProjects/Shuuseki/main.cpp
 iostream
 -
+string
+-
+vector
+-
+include/Corpus.h
+/Users/Hybin/CLionProjects/Shuuseki/include/Corpus.h
 
