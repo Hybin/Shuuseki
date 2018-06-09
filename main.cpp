@@ -7,6 +7,7 @@
 using namespace std;
 
 Corpus Shuuseki;
+vector<Corpus> Corpora;
 
 int create(const string &s)
 {
