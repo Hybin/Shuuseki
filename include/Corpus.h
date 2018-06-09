@@ -17,6 +17,8 @@ public:
     bool CorpusModified = false;
 };
 
-string create(const string &s);
+int create(const string &s);
+int open(const string &s);
+
 
 #endif //SHUUSEKI_CORPUS_H
