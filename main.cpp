@@ -57,12 +57,6 @@ int open(const string &s)
 
 int main()
 {
-    string s1, s2;
-    cout << ">>> ";
-    getline(cin, s1);
-    cout << create(s1) << endl;
-    cout << ">>> ";
-    getline(cin, s2);
-    cout << open(s2) << endl;
+
     return 0;
 }
