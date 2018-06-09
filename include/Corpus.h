@@ -19,5 +19,4 @@ public:
 
 string create(const string &s);
 
-
 #endif //SHUUSEKI_CORPUS_H
