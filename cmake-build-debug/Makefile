@@ -123,6 +123,33 @@ Shuuseki/fast:
 	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/build
 .PHONY : Shuuseki/fast
 
+init.o: init.cpp.o
+
+.PHONY : init.o
+
+# target to build an object file
+init.cpp.o:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/init.cpp.o
+.PHONY : init.cpp.o
+
+init.i: init.cpp.i
+
+.PHONY : init.i
+
+# target to preprocess a source file
+init.cpp.i:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/init.cpp.i
+.PHONY : init.cpp.i
+
+init.s: init.cpp.s
+
+.PHONY : init.s
+
+# target to generate assembly for a file
+init.cpp.s:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/init.cpp.s
+.PHONY : init.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -150,6 +177,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+operations.o: operations.cpp.o
+
+.PHONY : operations.o
+
+# target to build an object file
+operations.cpp.o:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/operations.cpp.o
+.PHONY : operations.cpp.o
+
+operations.i: operations.cpp.i
+
+.PHONY : operations.i
+
+# target to preprocess a source file
+operations.cpp.i:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/operations.cpp.i
+.PHONY : operations.cpp.i
+
+operations.s: operations.cpp.s
+
+.PHONY : operations.s
+
+# target to generate assembly for a file
+operations.cpp.s:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/operations.cpp.s
+.PHONY : operations.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -159,9 +213,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... Shuuseki"
+	@echo "... init.o"
+	@echo "... init.i"
+	@echo "... init.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... operations.o"
+	@echo "... operations.i"
+	@echo "... operations.s"
 .PHONY : help
 
 

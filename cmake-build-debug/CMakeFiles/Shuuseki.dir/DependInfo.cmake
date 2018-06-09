@@ -4,7 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/Users/Hybin/CLionProjects/Shuuseki/init.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/init.cpp.o"
   "/Users/Hybin/CLionProjects/Shuuseki/main.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/main.cpp.o"
+  "/Users/Hybin/CLionProjects/Shuuseki/operations.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/operations.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

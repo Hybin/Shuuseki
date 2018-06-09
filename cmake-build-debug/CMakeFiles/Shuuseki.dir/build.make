@@ -81,17 +81,69 @@ CMakeFiles/Shuuseki.dir/main.cpp.o.provides: CMakeFiles/Shuuseki.dir/main.cpp.o.
 CMakeFiles/Shuuseki.dir/main.cpp.o.provides.build: CMakeFiles/Shuuseki.dir/main.cpp.o
 
 
+CMakeFiles/Shuuseki.dir/operations.cpp.o: CMakeFiles/Shuuseki.dir/flags.make
+CMakeFiles/Shuuseki.dir/operations.cpp.o: ../operations.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Shuuseki.dir/operations.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Shuuseki.dir/operations.cpp.o -c /Users/Hybin/CLionProjects/Shuuseki/operations.cpp
+
+CMakeFiles/Shuuseki.dir/operations.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Shuuseki.dir/operations.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Hybin/CLionProjects/Shuuseki/operations.cpp > CMakeFiles/Shuuseki.dir/operations.cpp.i
+
+CMakeFiles/Shuuseki.dir/operations.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Shuuseki.dir/operations.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Hybin/CLionProjects/Shuuseki/operations.cpp -o CMakeFiles/Shuuseki.dir/operations.cpp.s
+
+CMakeFiles/Shuuseki.dir/operations.cpp.o.requires:
+
+.PHONY : CMakeFiles/Shuuseki.dir/operations.cpp.o.requires
+
+CMakeFiles/Shuuseki.dir/operations.cpp.o.provides: CMakeFiles/Shuuseki.dir/operations.cpp.o.requires
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/operations.cpp.o.provides.build
+.PHONY : CMakeFiles/Shuuseki.dir/operations.cpp.o.provides
+
+CMakeFiles/Shuuseki.dir/operations.cpp.o.provides.build: CMakeFiles/Shuuseki.dir/operations.cpp.o
+
+
+CMakeFiles/Shuuseki.dir/init.cpp.o: CMakeFiles/Shuuseki.dir/flags.make
+CMakeFiles/Shuuseki.dir/init.cpp.o: ../init.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Shuuseki.dir/init.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Shuuseki.dir/init.cpp.o -c /Users/Hybin/CLionProjects/Shuuseki/init.cpp
+
+CMakeFiles/Shuuseki.dir/init.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Shuuseki.dir/init.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Hybin/CLionProjects/Shuuseki/init.cpp > CMakeFiles/Shuuseki.dir/init.cpp.i
+
+CMakeFiles/Shuuseki.dir/init.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Shuuseki.dir/init.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Hybin/CLionProjects/Shuuseki/init.cpp -o CMakeFiles/Shuuseki.dir/init.cpp.s
+
+CMakeFiles/Shuuseki.dir/init.cpp.o.requires:
+
+.PHONY : CMakeFiles/Shuuseki.dir/init.cpp.o.requires
+
+CMakeFiles/Shuuseki.dir/init.cpp.o.provides: CMakeFiles/Shuuseki.dir/init.cpp.o.requires
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/init.cpp.o.provides.build
+.PHONY : CMakeFiles/Shuuseki.dir/init.cpp.o.provides
+
+CMakeFiles/Shuuseki.dir/init.cpp.o.provides.build: CMakeFiles/Shuuseki.dir/init.cpp.o
+
+
 # Object files for target Shuuseki
 Shuuseki_OBJECTS = \
-"CMakeFiles/Shuuseki.dir/main.cpp.o"
+"CMakeFiles/Shuuseki.dir/main.cpp.o" \
+"CMakeFiles/Shuuseki.dir/operations.cpp.o" \
+"CMakeFiles/Shuuseki.dir/init.cpp.o"
 
 # External object files for target Shuuseki
 Shuuseki_EXTERNAL_OBJECTS =
 
 Shuuseki: CMakeFiles/Shuuseki.dir/main.cpp.o
+Shuuseki: CMakeFiles/Shuuseki.dir/operations.cpp.o
+Shuuseki: CMakeFiles/Shuuseki.dir/init.cpp.o
 Shuuseki: CMakeFiles/Shuuseki.dir/build.make
 Shuuseki: CMakeFiles/Shuuseki.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable Shuuseki"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable Shuuseki"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Shuuseki.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -100,6 +152,8 @@ CMakeFiles/Shuuseki.dir/build: Shuuseki
 .PHONY : CMakeFiles/Shuuseki.dir/build
 
 CMakeFiles/Shuuseki.dir/requires: CMakeFiles/Shuuseki.dir/main.cpp.o.requires
+CMakeFiles/Shuuseki.dir/requires: CMakeFiles/Shuuseki.dir/operations.cpp.o.requires
+CMakeFiles/Shuuseki.dir/requires: CMakeFiles/Shuuseki.dir/init.cpp.o.requires
 
 .PHONY : CMakeFiles/Shuuseki.dir/requires
 

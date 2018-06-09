@@ -17,8 +17,14 @@ public:
     bool CorpusModified = false;
 };
 
-int create(const string &s);
-int open(const string &s);
+//init.cpp
+int initialize();
+bool check(const string &s);
+
+// operations.cpp
+int create(const string &corpusName);
+int open(const string &corpusName);
+int import(const vector<string> &files);
 
 
 #endif //SHUUSEKI_CORPUS_H

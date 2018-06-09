@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Shuuseki.dir/main.cpp.o"
+  "CMakeFiles/Shuuseki.dir/operations.cpp.o"
+  "CMakeFiles/Shuuseki.dir/init.cpp.o"
   "Shuuseki.pdb"
   "Shuuseki"
 )
