@@ -1,18 +1,14 @@
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
 #include "include/Corpus.h"
 
 using namespace std;
 
 int main()
 {
-    initialize();
-
     string s;
     cout << ">>> ";
-    getline(cin, s);
-    create(s);
+    cin >> s;
+    cout << checkEncoding(s) << endl;
+
     return 0;
 }

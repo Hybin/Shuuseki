@@ -123,6 +123,33 @@ Shuuseki/fast:
 	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/build
 .PHONY : Shuuseki/fast
 
+encoding.o: encoding.cpp.o
+
+.PHONY : encoding.o
+
+# target to build an object file
+encoding.cpp.o:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/encoding.cpp.o
+.PHONY : encoding.cpp.o
+
+encoding.i: encoding.cpp.i
+
+.PHONY : encoding.i
+
+# target to preprocess a source file
+encoding.cpp.i:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/encoding.cpp.i
+.PHONY : encoding.cpp.i
+
+encoding.s: encoding.cpp.s
+
+.PHONY : encoding.s
+
+# target to generate assembly for a file
+encoding.cpp.s:
+	$(MAKE) -f CMakeFiles/Shuuseki.dir/build.make CMakeFiles/Shuuseki.dir/encoding.cpp.s
+.PHONY : encoding.cpp.s
+
 init.o: init.cpp.o
 
 .PHONY : init.o
@@ -213,6 +240,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... Shuuseki"
+	@echo "... encoding.o"
+	@echo "... encoding.i"
+	@echo "... encoding.s"
 	@echo "... init.o"
 	@echo "... init.i"
 	@echo "... init.s"

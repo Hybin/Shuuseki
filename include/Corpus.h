@@ -7,24 +7,27 @@
 
 #include <string>
 #include <vector>
-
-using namespace std;
+#include <fstream>
+#include <cstdio>
 
 class Corpus {
 public:
-    string CorpusName;
-    vector<string> FileList;
-    bool CorpusModified = false;
+    std::string CorpusName;
+    std::vector<std::string> FileList;
 };
 
 //init.cpp
 int initialize();
-bool check(const string &s);
+bool check(const std::string &s);
 
 // operations.cpp
-int create(const string &corpusName);
-int open(const string &corpusName);
-int import(const vector<string> &files);
+int create(const std::string &corpusName);
+int open(const std::string &corpusName);
+int import(const std::vector<std::string> &files);
 
+// encoding.cpp
+std::string is_unicode_or_utf8(std::string &file);
+std::string is_gb_or_big5(const char * file);
+std::string checkEncoding(std::string &file);
 
 #endif //SHUUSEKI_CORPUS_H

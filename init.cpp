@@ -2,10 +2,7 @@
 // Created by Hybin on 2018/6/9.
 //
 
-#include <fstream>
 #include <iostream>
-#include <vector>
-#include <string>
 #include "include/Corpus.h"
 
 using namespace std;
