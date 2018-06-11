@@ -26,8 +26,17 @@ int open(const std::string &corpusName);
 int import(const std::vector<std::string> &files);
 
 // encoding.cpp
+// Check the encoding of the contents
 std::string is_unicode_or_utf8(std::string &file);
 std::string is_gb_or_big5(const char * file);
 std::string checkEncoding(std::string &file);
+
+// Transform various of encoding format into UTF-8
+char * unicode_to_utf8(unsigned short unicode);
+char * gbk_to_unicode(const char * file);
+char * big5_to_gbk(const char * file);
+
+int transform(std::string &file);
+
 
 #endif //SHUUSEKI_CORPUS_H

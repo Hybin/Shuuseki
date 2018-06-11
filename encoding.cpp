@@ -56,7 +56,7 @@ string is_unicode_or_utf8(string &file)
             encode = "UTF-16BE";
             break;
         case 0xefbb:
-            encode = "UTF-8";
+            encode = "UTF-8 with BOM";
             break;
         default:
             encode = "other";
@@ -73,6 +73,47 @@ string checkEncoding(std::string &file)
     if (encode == "other") encode = is_gb_or_big5(cfile);
 
     return encode;
+}
+
+// Transform various of encoding format into UTF-8
+char * unicode_to_utf8(unsigned short unicode)
+{
+    static char utf8[3];
+
+    utf8[0] = 0xe0 | (unicode >> 12);
+    utf8[1] = 0x80 | ((unicode >> 6) & 0x3f);
+    utf8[2] = 0x80 | (unicode & 0x3f);
+
+    return utf8;
+}
+
+int transform(string &file)
+{
+    string stats = checkEncoding(file);
+
+    ifstream in(file, ios_base::binary | ios_base::ate);
+    ofstream out("hide-output.txt", ios_base::out | ios_base::ate);
+
+    auto end_mark = in.tellg();
+    in.seekg(0, ifstream::beg);
+
+    unsigned char c;
+
+    while (in && in.tellg() != end_mark) {
+        in.read((char*) &c, sizeof(c));
+        unsigned short p = c << 8;       // First Byte
+        unsigned short ft = c, st;
+        in.read((char*) &c, sizeof(c));
+        p += c;                          // First Byte + Second Byte For UTF-16BE
+        st = c << 8;
+        st += ft;                        // Second Byte + First Byte For UTF-16LE
+        if (p == 0xfffe || p == 0xfeff)
+            continue;
+        if (stats == "UTF-16BE") out << unicode_to_utf8(p);
+        if (stats == "UTF-16LE") out << unicode_to_utf8(st);
+
+    }
+    return 0;
 }
 
 
