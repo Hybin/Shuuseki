@@ -33,7 +33,7 @@ int isutf8(const char *s, size_t ns)
     return 0;
 }
 
-string is_utf8_or_utf8bom(string &file)
+string is_utf8_or_utf8bom(const string &file)
 {
     ifstream in(file, ios_base::binary | ios_base::ate);
     in.seekg(0, in.end);
@@ -88,7 +88,7 @@ string is_gb_or_big5(const char * file)
 }
 
 // Check the encoding of the file (Unicode * or UTF-8)
-string is_unicode(string &file)
+string is_unicode(const string &file)
 {
     ifstream in(file, ios_base::binary);
     unsigned char c;
@@ -117,7 +117,7 @@ string is_unicode(string &file)
     return encode;
 }
 
-string checkEncoding(std::string &file)
+string checkEncoding(const string &file)
 {
     string encode = is_utf8_or_utf8bom(file);            // is UTF-8 or UTF-8 with BOM or not?
     if (is_utf8_or_utf8bom(file) == "~UTF-8")
@@ -148,7 +148,7 @@ int gbk_or_big5_2_utf8(char* in, const char* encoding)
     unsigned long outlen = strlen(in) * 3;
     char outbuf[outlen];
 
-    ofstream out("hide-utf8.txt", ios_base::out | ios_base::ate);
+    ofstream out("convert-output.txt", ios_base::out | ios_base::ate);
     cc.convert(in, strlen(in), outbuf, outlen);
     // if enconding is gb2312
     if (strlen(outbuf) % 2 == 1 && outbuf[-1] == 0x6f) {
@@ -159,12 +159,12 @@ int gbk_or_big5_2_utf8(char* in, const char* encoding)
     return 0;
 }
 
-int transform(string &file)
+int transform(const string &file)
 {
     string stats = checkEncoding(file);
 
     ifstream in(file, ios_base::binary | ios_base::ate);
-    ofstream out("hide-output.txt", ios_base::out | ios_base::ate);
+    ofstream out("convert-output.txt", ios_base::out | ios_base::ate);
 
     in.seekg(0, in.end);
     long long end_mark = in.tellg();
@@ -197,6 +197,8 @@ int transform(string &file)
             if (stats == "UTF-16LE") out << unicode_to_utf8(st);
         }
     }
+
+    in.close();
 
     return 0;
 }
