@@ -36,6 +36,7 @@ std::string checkEncoding(std::string &file);
 // Transform various of encoding format into UTF-8
 char * unicode_to_utf8(unsigned short unicode);
 int gbk_or_big5_2_utf8(char* in, const char* encoding);
+int isutf8(const char *s, size_t ns);
 
 int transform(std::string &file);
 

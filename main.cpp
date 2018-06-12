@@ -10,7 +10,7 @@ int main()
     string s;
     cout << ">>> ";
     cin >> s;
-    cout << checkEncoding(s) << endl;
+    cout << transform(s) << endl;
 
     return 0;
 }
