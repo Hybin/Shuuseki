@@ -13,7 +13,6 @@ int create(const string &corpusName)
 {
     if (check(corpusName)) {
         cerr << "The Corpus has been created. Do not build it again!" << endl;
-        return -1;
     }
 
     // Create a Corpus Object
@@ -38,7 +37,6 @@ int create(const string &corpusName)
 
     if (!corpus) {
         cerr << "-Shuuseki: Failed to create a corpus" << endl;
-        return -1;
     }
 
     // Show status
@@ -49,7 +47,7 @@ int create(const string &corpusName)
     return 0;
 }
 
-int open(const string &corpusName)
+int openCorpus(const string &corpusName)
 {
     string cmd;
 
@@ -59,19 +57,7 @@ int open(const string &corpusName)
 
     if (!corpus) {
         cerr << "-Shuuseki: Failed to open a corpus" << endl;
-        cout << "-Shuuseki: No such Corpus called [" + corpusName + "], wanna create it?[y/n] ";
-        cin >> cmd;
-        if (cmd == "y") {
-            create(corpusName);
-        } else if (cmd == "n") {
-            return -1;
-        }
-
     }
-
-    corpus.close();
-
-    project = corpusName;
 
     return 0;
 }
@@ -79,24 +65,24 @@ int open(const string &corpusName)
 int import(const vector<string> &files)
 {
     if (project.empty()) {
-        cerr << "You may need to create a Corpus or open one" << endl;
+        cerr << "Caution: You may need to create a Corpus or open one" << endl;
         return -1;
     }
 
-    fstream corpus(project + ".corpus", ios_base::out | ios_base::in | ios_base::app);
-    if (!corpus) {
+    fstream imported_corpus(project + ".corpus", ios_base::out | ios_base::in | ios_base::app);
+    if (!imported_corpus) {
         cerr << "corpus not exist" << endl;
         return -1;
     }
-    ifstream corpus_config(project + ".config", ios_base::in);
-    if (!corpus_config) {
+    ifstream imported_corpus_config(project + ".config", ios_base::in);
+    if (!imported_corpus_config) {
         cerr << "corpus_config not exist" << endl;
         return -1;
     }
 
     // Create an Object to store the information.
     Corpus Shuuseki;
-    vector<string> basic_info = readCorpusInfo(corpus_config);
+    vector<string> basic_info = readCorpusInfo(imported_corpus_config);
 
     Shuuseki.CorpusName = basic_info[3];
     if (basic_info[7] != "0" )
@@ -104,7 +90,7 @@ int import(const vector<string> &files)
     else
         Shuuseki.FileList = {};
 
-    corpus_config.close();
+    imported_corpus_config.close();
 
     for (auto &file : files) {
         ifstream in(file, ios_base::in);
@@ -120,14 +106,14 @@ int import(const vector<string> &files)
             ifstream transformed("convert-output.txt", ios_base::in);
             string s;
             while (getline(transformed, s)) {
-                corpus << s;
+                imported_corpus << s;
             }
             transformed.close();
             remove("convert-output.txt");
         } else {
             string t;
             while (getline(in, t)) {
-                corpus << t;
+                imported_corpus << t;
             }
         }
 
@@ -144,3 +130,4 @@ int import(const vector<string> &files)
 
     return 0;
 }
+

@@ -3,8 +3,6 @@
 
 using namespace std;
 
-
-
 int main()
 {
     initialize();
@@ -26,14 +24,11 @@ int main()
             corpusName = s.substr(mark + 1, s.size() - mark - 1);
 
         if (corpusCmd == "create") create(corpusName);
-        if (corpusCmd == "open") open(corpusName);
-
-        if ((open(corpusName) == -1) || (create(corpusName) == -1)) continue;
+        if (corpusCmd == "open") openCorpus(corpusName);
 
         if (corpusCmd == "import" || corpusCmd == "delete") {
-            string fileNames = s.substr(mark + 1, s.size() - mark - 1);
-            vector<string> files = split(fileNames, " ");
-            import(files);
+            fileName = s.substr(mark + 1, s.size() - mark - 1);
+            vector<string> files = split(fileName, " ");
             if (import(files) == -1) continue;
         }
     }

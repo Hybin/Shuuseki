@@ -10,7 +10,6 @@
 #include <fstream>
 #include <cstdio>
 
-
 class Corpus {
 public:
     std::string CorpusName;
@@ -26,7 +25,7 @@ std::string vector2string(std::vector<std::string> vec);
 
 // operations.cpp
 int create(const std::string &corpusName);
-int open(const std::string &corpusName);
+int openCorpus(const std::string &corpusName);
 int import(const std::vector<std::string> &files);
 
 // encoding.cpp
