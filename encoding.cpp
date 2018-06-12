@@ -47,13 +47,13 @@ string is_utf8_or_utf8bom(string &file)
 
     string encode;
 
-    if (isutf8(buffer, strlen(buffer)) == 2) {
+    if (isutf8(buffer, strlen(buffer)) != 3) {
         encode = "~UTF-8";
     }
 
     if (isutf8(buffer, strlen(buffer)) == 3) {
-        int c = buffer[0] + buffer[1];
-        if (c == 0xefbb)
+
+        if (is_unicode(file) == "UTF-8 with BOM")
             encode = "UTF-8 with BOM";
         else
             encode = "UTF-8";
@@ -106,6 +106,9 @@ string is_unicode(string &file)
         case 0xfeff:
             encode = "UTF-16BE";
             break;
+        case 0xefbb:
+            encode = "UTF-8 with BOM";
+            break;
         default:
             encode = "other";
     }
@@ -117,10 +120,12 @@ string is_unicode(string &file)
 string checkEncoding(std::string &file)
 {
     string encode = is_utf8_or_utf8bom(file);            // is UTF-8 or UTF-8 with BOM or not?
-    if (encode == "~UTF-8") encode = is_unicode(file);   // is Unicode or not?
+    if (is_utf8_or_utf8bom(file) == "~UTF-8")
+        encode = is_unicode(file);                       // is Unicode or not?
 
     const char * cfile = file.c_str();
-    if (encode == "other") encode = is_gb_or_big5(cfile);
+    if (encode == "other")
+        encode = is_gb_or_big5(cfile);
 
     return encode;
 }
