@@ -85,6 +85,9 @@
 		<Unit filename="/Users/Hybin/CLionProjects/Shuuseki/encoding.cpp">
 			<Option target="Shuuseki"/>
 		</Unit>
+		<Unit filename="/Users/Hybin/CLionProjects/Shuuseki/include/CodeConverter.h">
+			<Option target="Shuuseki"/>
+		</Unit>
 		<Unit filename="/Users/Hybin/CLionProjects/Shuuseki/include/Corpus.h">
 			<Option target="Shuuseki"/>
 		</Unit>

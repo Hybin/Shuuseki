@@ -6,8 +6,61 @@
 #include <iterator>
 #include <iostream>
 #include "include/Corpus.h"
+#include "include/CodeConverter.h"
 
 using namespace std;
+
+// Check the encoding of the file (utf-8 or utf-8 with BOM)
+
+int isutf8(const char *s, size_t ns)
+{
+    uint8_t x = 0, i = 0, j = 0, nbytes = 0, n = 0;
+
+    for(i = 1; i < 7; i++)
+    {
+        x = (uint8_t)(255 << i);
+        if(((uint8_t)*s & x) == x)
+        {
+            n = nbytes = (8 - i);
+            for(j = 0; (j < nbytes && j < ns); j++)
+            {
+                if((uint8_t)s[j] <= 0x80 && (uint8_t)s[j] >= 0xc0)break;
+                else n--;
+            }
+            if(n == 0) return nbytes;
+        }
+    }
+    return 0;
+}
+
+string is_utf8_or_utf8bom(string &file)
+{
+    ifstream in(file, ios_base::binary | ios_base::ate);
+    in.seekg(0, in.end);
+    long long end_mark = in.tellg();
+    in.seekg(0, ifstream::beg);
+
+    auto *buffer = new char[end_mark];
+    in.read(buffer, end_mark);
+
+    in.close();
+
+    string encode;
+
+    if (isutf8(buffer, strlen(buffer)) == 2) {
+        encode = "~UTF-8";
+    }
+
+    if (isutf8(buffer, strlen(buffer)) == 3) {
+        int c = buffer[0] + buffer[1];
+        if (c == 0xefbb)
+            encode = "UTF-8 with BOM";
+        else
+            encode = "UTF-8";
+    }
+
+    return encode;
+}
 
 // Check the encoding of the file (GB* or Big 5)
 string is_gb_or_big5(const char * file)
@@ -26,10 +79,8 @@ string is_gb_or_big5(const char * file)
 
     float ratio = (float)hanzibyte / (float)hanzinum;
     string encode;
-    if (ratio > 184)
+    if (ratio > 186)
         encode = "GB码";
-    else if (ratio > 180)
-        encode = "UTF-8";
     else
         encode = "Big5";
 
@@ -37,7 +88,7 @@ string is_gb_or_big5(const char * file)
 }
 
 // Check the encoding of the file (Unicode * or UTF-8)
-string is_unicode_or_utf8(string &file)
+string is_unicode(string &file)
 {
     ifstream in(file, ios_base::binary);
     unsigned char c;
@@ -55,9 +106,6 @@ string is_unicode_or_utf8(string &file)
         case 0xfeff:
             encode = "UTF-16BE";
             break;
-        case 0xefbb:
-            encode = "UTF-8 with BOM";
-            break;
         default:
             encode = "other";
     }
@@ -68,7 +116,9 @@ string is_unicode_or_utf8(string &file)
 
 string checkEncoding(std::string &file)
 {
-    string encode = is_unicode_or_utf8(file);
+    string encode = is_utf8_or_utf8bom(file);            // is UTF-8 or UTF-8 with BOM or not?
+    if (encode == "~UTF-8") encode = is_unicode(file);   // is Unicode or not?
+
     const char * cfile = file.c_str();
     if (encode == "other") encode = is_gb_or_big5(cfile);
 
@@ -87,6 +137,23 @@ char * unicode_to_utf8(unsigned short unicode)
     return utf8;
 }
 
+int gbk_or_big5_2_utf8(char* in, const char* encoding)
+{
+    CodeConverter cc = CodeConverter(encoding, "utf-8");
+    unsigned long outlen = strlen(in) * 3;
+    char outbuf[outlen];
+
+    ofstream out("hide-utf8.txt", ios_base::out | ios_base::ate);
+    cc.convert(in, strlen(in), outbuf, outlen);
+    // if enconding is gb2312
+    if (strlen(outbuf) % 2 == 1 && outbuf[-1] == 0x6f) {
+        outbuf[-1] = '\0';
+    }
+    out << outbuf;
+    out.close();
+    return 0;
+}
+
 int transform(string &file)
 {
     string stats = checkEncoding(file);
@@ -94,27 +161,41 @@ int transform(string &file)
     ifstream in(file, ios_base::binary | ios_base::ate);
     ofstream out("hide-output.txt", ios_base::out | ios_base::ate);
 
-    auto end_mark = in.tellg();
+    in.seekg(0, in.end);
+    long long end_mark = in.tellg();
     in.seekg(0, ifstream::beg);
+    auto *buffer = new char[end_mark];
 
-    unsigned char c;
+    in.read(buffer, end_mark);
 
-    while (in && in.tellg() != end_mark) {
-        in.read((char*) &c, sizeof(c));
-        unsigned short p = c << 8;       // First Byte
-        unsigned short ft = c, st;
-        in.read((char*) &c, sizeof(c));
-        p += c;                          // First Byte + Second Byte For UTF-16BE
-        st = c << 8;
-        st += ft;                        // Second Byte + First Byte For UTF-16LE
-        if (p == 0xfffe || p == 0xfeff)
-            continue;
-        if (stats == "UTF-16BE") out << unicode_to_utf8(p);
-        if (stats == "UTF-16LE") out << unicode_to_utf8(st);
+    if (stats == "GB码") gbk_or_big5_2_utf8(buffer, "gbk");
+    if (stats == "Big5") gbk_or_big5_2_utf8(buffer, "big5");
 
+    delete[] buffer;
+
+    if ((stats == "UTF-16BE") || (stats == "UTF-16LE")) {
+        unsigned char c;
+        in.seekg(0, ifstream::beg);
+
+        while (in && in.tellg() != end_mark) {
+            // Transform unicode into utf-8
+            in.read((char*) &c, sizeof(c));
+            unsigned short p = c << 8;       // First Byte
+            unsigned short ft = c, st;
+            in.read((char*) &c, sizeof(c));
+            p += c;                          // First Byte + Second Byte For UTF-16BE
+            st = c << 8;
+            st += ft;                        // Second Byte + First Byte For UTF-16LE
+            if (p == 0xfffe || p == 0xfeff)
+                continue;
+            if (stats == "UTF-16BE") out << unicode_to_utf8(p);
+            if (stats == "UTF-16LE") out << unicode_to_utf8(st);
+        }
     }
+
     return 0;
 }
+
 
 
 
