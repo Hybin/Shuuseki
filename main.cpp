@@ -7,17 +7,36 @@ using namespace std;
 
 int main()
 {
+    initialize();
+
     string s;
-    cout << ">>> ";
-    cin >> s;
-    fstream test(s, ios_base::in | ios_base::out);
-    string t;
-    vector<string> r;
-    while (test >> t) {
-        r.push_back(t);
+    while (true) {
+        cout << ">>> ";
+        getline(cin, s);
+        if (s == "exit") break;
+
+        unsigned long mark = s.find(" "); // Find the pos of the 1st space
+        if (mark == -1 && s != "exit") {
+            cerr << "-Shuuseki: " + s + ": command not find" << endl;
+            continue;
+        }
+
+        string corpusCmd = s.substr(0, mark), fileName, corpusName;
+        if (corpusCmd == "create" || corpusCmd == "open")
+            corpusName = s.substr(mark + 1, s.size() - mark - 1);
+
+        if (corpusCmd == "create") create(corpusName);
+        if (corpusCmd == "open") open(corpusName);
+
+        if ((open(corpusName) == -1) || (create(corpusName) == -1)) continue;
+
+        if (corpusCmd == "import" || corpusCmd == "delete") {
+            string fileNames = s.substr(mark + 1, s.size() - mark - 1);
+            vector<string> files = split(fileNames, " ");
+            import(files);
+            if (import(files) == -1) continue;
+        }
     }
-    cout << r[3] << " ";
-    cout << r[8];
 
     return 0;
 }

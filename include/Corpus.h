@@ -20,6 +20,9 @@ public:
 //init.cpp
 int initialize();
 bool check(const std::string &s);
+std::vector<std::string> readCorpusInfo(std::ifstream &in);
+std::vector<std::string> split(const std::string  &s, std::string token);
+std::string vector2string(std::vector<std::string> vec);
 
 // operations.cpp
 int create(const std::string &corpusName);
