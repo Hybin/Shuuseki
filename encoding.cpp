@@ -145,7 +145,7 @@ char * unicode_to_utf8(unsigned short unicode)
 int gbk_or_big5_2_utf8(char* in, const char* encoding)
 {
     CodeConverter cc = CodeConverter(encoding, "utf-8");
-    unsigned long outlen = strlen(in) * 3;
+    size_t outlen = strlen(in) * 2;
     char outbuf[outlen];
 
     ofstream out("convert-output.txt", ios_base::out | ios_base::ate);
@@ -199,6 +199,7 @@ int transform(const string &file)
     }
 
     in.close();
+    out.close();
 
     return 0;
 }

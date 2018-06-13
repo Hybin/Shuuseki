@@ -23,8 +23,8 @@ bool check(const std::string &s);
 std::vector<std::string> readCorpusInfo(std::ifstream &in);
 std::vector<std::string> split(const std::string  &s, std::string token);
 std::string vector2string(std::vector<std::string> vec);
-std::vector<std::string> getAbsIndice(std::ifstream &in);
-std::vector<std::vector<std::string>> getConIndice(std::ifstream &in);
+std::vector<std::string> getAbsIndice(std::vector<std::string> &src);
+std::vector<std::vector<std::string>> getConIndice(std::vector<std::string> &src);
 int match(std::vector<std::string> &src, const std::string &s);
 
 // operations.cpp

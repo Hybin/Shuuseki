@@ -88,24 +88,23 @@ string vector2string(vector<string> vec)
     return s;
 }
 
-vector<string> getAbsIndice(ifstream &in)
+vector<string> getAbsIndice(vector<string> &src)
 {
-    vector<string> srcVec = readCorpusInfo(in);
-    auto fileNum = static_cast<int>(srcVec.size() / 8);      // Get the number of files you have imported
+
+    auto fileNum = static_cast<int>(src.size() / 8);      // Get the number of files you have imported
     int iter = (fileNum - 1) * 8;
 
     vector<string> absIndex;                                 // Get a list only with file names and a list including file names and indice
     for (int i = 1; i <= (iter + 1); i += 8) {
-        absIndex.push_back(srcVec[i]);                       // Get abstract Index
+        absIndex.push_back(src[i]);                       // Get abstract Index
     }
 
     return absIndex;
 }
 
-vector<vector<string>> getConIndice(ifstream &in)
+vector<vector<string>> getConIndice(vector<string> &src)
 {
-    vector<string> srcVec = readCorpusInfo(in);
-    auto fileNum = static_cast<int>(srcVec.size() / 8);      // Get the number of files you have imported
+    auto fileNum = static_cast<int>(src.size() / 8);      // Get the number of files you have imported
     int iter = (fileNum - 1) * 8;
 
     vector<vector<string>> conIndex;                         // Get a list only with file names and a list including file names and indice
@@ -113,9 +112,9 @@ vector<vector<string>> getConIndice(ifstream &in)
     for (int i = 1; i <= (iter + 1); i += 8) {
         vector<string> atom;
 
-        atom.push_back(srcVec[i]);                           // Get the file name
-        atom.push_back(srcVec[i + 3]);                       // Get the index:begin
-        atom.push_back(srcVec[i + 6]);                       // Get the index:end
+        atom.push_back(src[i]);                           // Get the file name
+        atom.push_back(src[i + 3]);                       // Get the index:begin
+        atom.push_back(src[i + 6]);                       // Get the index:end
 
         conIndex.push_back(atom);                            // Get concrete Index
     }

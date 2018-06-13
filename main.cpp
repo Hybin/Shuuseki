@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -39,7 +40,18 @@ int main()
         if (corpusCmd == "delete") {
             if (deleteCorpus(files) == -1) continue;
         }
-    }
 
+    }
+    /*
+    ifstream in("dream.txt", ios_base::binary | ios_base::ate);
+    in.seekg(0, in.end);
+    long long end_mark = in.tellg();
+    in.seekg(0, ifstream::beg);
+    auto *buffer = new char[end_mark];
+    in.read(buffer, end_mark);
+    cout << strlen(buffer);
+    delete[] buffer;
+    in.close();
+     */
     return 0;
 }
