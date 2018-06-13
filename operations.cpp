@@ -69,11 +69,12 @@ int import(const vector<string> &files)
         return -1;
     }
 
-    fstream imported_corpus(project + ".corpus", ios_base::out | ios_base::in | ios_base::app);
+    fstream imported_corpus(project + ".corpus", ios_base::out | ios_base::in | ios_base::app | ios_base::ate);
     if (!imported_corpus) {
         cerr << "corpus not exist" << endl;
         return -1;
     }
+
     ifstream imported_corpus_config(project + ".config", ios_base::in);
     if (!imported_corpus_config) {
         cerr << "corpus_config not exist" << endl;
@@ -93,6 +94,11 @@ int import(const vector<string> &files)
     imported_corpus_config.close();
 
     for (auto &file : files) {
+        long long start_mark, end_mark;
+        // Get the start point of the file
+        imported_corpus.seekg(0, fstream::end);
+        start_mark = imported_corpus.tellg();
+
         ifstream in(file, ios_base::in);
 
         if (!in) {
@@ -117,7 +123,15 @@ int import(const vector<string> &files)
             }
         }
 
+        end_mark = imported_corpus.tellg(); // Get the end point of the file after importing
+
         Shuuseki.FileList.push_back(file);
+
+        ofstream content_index(Shuuseki.CorpusName + "_content.index", ios_base::out | ios_base::app);
+        content_index << "File: " << file << " ;";
+        content_index << "Start Point: " << start_mark << " ;";
+        content_index << "End Point: " << end_mark <<" ;";
+        content_index.close();
 
         in.close();
     }
@@ -130,4 +144,6 @@ int import(const vector<string> &files)
 
     return 0;
 }
+
+int deleteCorpus(const vector<string> &files);
 

@@ -6,6 +6,7 @@
 #define SHUUSEKI_CODECONVERTER_H
 
 #include <iconv.h>
+#include <cstring>
 
 class CodeConverter {
 private:

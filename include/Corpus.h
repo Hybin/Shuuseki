@@ -27,6 +27,7 @@ std::string vector2string(std::vector<std::string> vec);
 int create(const std::string &corpusName);
 int openCorpus(const std::string &corpusName);
 int import(const std::vector<std::string> &files);
+int deleteCorpus(const std::vector<std::string> &files);
 
 // encoding.cpp
 // Check the encoding of the contents

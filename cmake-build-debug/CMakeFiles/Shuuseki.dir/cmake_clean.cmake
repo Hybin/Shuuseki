@@ -1,10 +1,12 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/Shuuseki.dir/main.cpp.o"
-  "CMakeFiles/Shuuseki.dir/operations.cpp.o"
-  "CMakeFiles/Shuuseki.dir/init.cpp.o"
-  "CMakeFiles/Shuuseki.dir/encoding.cpp.o"
+  "CMakeFiles/Shuuseki.dir/main.cpp.obj"
+  "CMakeFiles/Shuuseki.dir/operations.cpp.obj"
+  "CMakeFiles/Shuuseki.dir/init.cpp.obj"
+  "CMakeFiles/Shuuseki.dir/encoding.cpp.obj"
   "Shuuseki.pdb"
-  "Shuuseki"
+  "Shuuseki.exe"
+  "Shuuseki.exe.manifest"
+  "libShuuseki.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
