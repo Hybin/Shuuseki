@@ -63,7 +63,7 @@ vector<string> split(const string &s, string token)
     string::size_type index;
     vector<string> result;
     string ss = string(s, 0, string::npos);
-    while (ss.size()) {
+    while (!ss.empty()) {
         index = ss.find(token);
         if (index != string::npos) {
             result.push_back(ss.substr(0, index));
@@ -81,9 +81,53 @@ vector<string> split(const string &s, string token)
 string vector2string(vector<string> vec)
 {
     string s;
-    for (auto i : vec) {
+    for (auto &i : vec) {
         s += i + ",";
     }
 
     return s;
+}
+
+vector<string> getAbsIndice(ifstream &in)
+{
+    vector<string> srcVec = readCorpusInfo(in);
+    auto fileNum = static_cast<int>(srcVec.size() / 8);      // Get the number of files you have imported
+    int iter = (fileNum - 1) * 8;
+
+    vector<string> absIndex;                                 // Get a list only with file names and a list including file names and indice
+    for (int i = 1; i <= (iter + 1); i += 8) {
+        absIndex.push_back(srcVec[i]);                       // Get abstract Index
+    }
+
+    return absIndex;
+}
+
+vector<vector<string>> getConIndice(ifstream &in)
+{
+    vector<string> srcVec = readCorpusInfo(in);
+    auto fileNum = static_cast<int>(srcVec.size() / 8);      // Get the number of files you have imported
+    int iter = (fileNum - 1) * 8;
+
+    vector<vector<string>> conIndex;                         // Get a list only with file names and a list including file names and indice
+
+    for (int i = 1; i <= (iter + 1); i += 8) {
+        vector<string> atom;
+
+        atom.push_back(srcVec[i]);                           // Get the file name
+        atom.push_back(srcVec[i + 3]);                       // Get the index:begin
+        atom.push_back(srcVec[i + 6]);                       // Get the index:end
+
+        conIndex.push_back(atom);                            // Get concrete Index
+    }
+
+    return conIndex;
+}
+
+int match(vector<string> &src, const string &s)
+{
+    vector<string>::iterator goal = find(src.begin(), src.end(), s);
+    if (goal != src.end())
+        return static_cast<int>(goal - src.begin());
+    else
+        return -1;
 }

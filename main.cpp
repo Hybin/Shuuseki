@@ -20,6 +20,7 @@ int main()
         }
 
         string corpusCmd = s.substr(0, mark), fileName, corpusName;
+        vector<string> files;
         if (corpusCmd == "create" || corpusCmd == "open")
             corpusName = s.substr(mark + 1, s.size() - mark - 1);
 
@@ -28,8 +29,15 @@ int main()
 
         if (corpusCmd == "import" || corpusCmd == "delete") {
             fileName = s.substr(mark + 1, s.size() - mark - 1);
-            vector<string> files = split(fileName, " ");
+            files = split(fileName, " ");
+        }
+
+        if (corpusCmd == "import") {
             if (import(files) == -1) continue;
+        }
+
+        if (corpusCmd == "delete") {
+            if (deleteCorpus(files) == -1) continue;
         }
     }
 

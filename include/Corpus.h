@@ -9,6 +9,7 @@
 #include <vector>
 #include <fstream>
 #include <cstdio>
+#include <algorithm>
 
 class Corpus {
 public:
@@ -22,6 +23,9 @@ bool check(const std::string &s);
 std::vector<std::string> readCorpusInfo(std::ifstream &in);
 std::vector<std::string> split(const std::string  &s, std::string token);
 std::string vector2string(std::vector<std::string> vec);
+std::vector<std::string> getAbsIndice(std::ifstream &in);
+std::vector<std::vector<std::string>> getConIndice(std::ifstream &in);
+int match(std::vector<std::string> &src, const std::string &s);
 
 // operations.cpp
 int create(const std::string &corpusName);
