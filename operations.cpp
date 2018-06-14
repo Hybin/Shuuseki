@@ -162,7 +162,7 @@ int import(const vector<string> &files)
     updated_corpus_config << "Corpus Name = " << Shuuseki.CorpusName << " ;";
     updated_corpus_config << "Corpus FileList = " << vector2string(Shuuseki.FileList) << " ;";
 
-    cout << "-Shuuseki: Your data has been imported " + to_string(count) + "files" + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
+    cout << "-Shuuseki: Your data has been imported " + to_string(count) + " files " + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
 
     return 0;
 }

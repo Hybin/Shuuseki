@@ -13,7 +13,8 @@ int main()
     cout << "   [create] [corpus name]" << endl;
     cout << "   [open] [corpus name]" << endl;
     cout << "   [import] [file name] [file name] [...]" << endl;
-    cout << "   [delete] [file name] [file name] [...]" << endl;
+    cout << "   [delete] [file name] [file name] [...]" << "\n" <<endl;
+    cout << "To avoid Stack Overflow, if your file with encoding (~UTF-8), it is better to save it with encoding UTF-8 and import it." << "\n" <<endl;
 
     string s;
     while (true) {
