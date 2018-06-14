@@ -53,15 +53,17 @@ int openCorpus(const string &corpusName)
 
     // Open the corpus with read / write mode
     ifstream corpus;
-    corpus.open(corpusName + ".corpus");
+    corpus.open(corpusName + ".corpus", ios_base::in);
 
     if (!corpus) {
         cerr << "-Shuuseki: Failed to open a corpus" << endl;
+    } else {
+        project = corpusName;
+        cout << "-Shuuseki: Corpus [" + project +"] has been opened." << endl;
     }
 
-    project = corpusName;
+    corpus.close();
 
-    cout << "-Shuuseki: Corpus [" + project +"] has been opened." << endl;
     return 0;
 }
 
@@ -95,6 +97,8 @@ int import(const vector<string> &files)
         Shuuseki.FileList = {};
 
     imported_corpus_config.close();
+
+    int count = 0;
 
     for (auto &file : files) {
         // Test if it has existed
@@ -150,36 +154,38 @@ int import(const vector<string> &files)
         content_index.close();
 
         in.close();
+
+        count += 1;
     }
 
     fstream updated_corpus_config(project + ".config", ios_base::out | ios_base::trunc);
     updated_corpus_config << "Corpus Name = " << Shuuseki.CorpusName << " ;";
     updated_corpus_config << "Corpus FileList = " << vector2string(Shuuseki.FileList) << " ;";
 
-    cout << "-Shuuseki: Your data has been imported into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
+    cout << "-Shuuseki: Your data has been imported " + to_string(count) + "files" + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
 
     return 0;
 }
 
-int deleteCorpus(const vector<string> &files)
-{
+int deleteCorpus(const vector<string> &files) {
     if (project.empty()) {
         cerr << "-Shuuseki: Caution: You may need to create a Corpus or open one" << endl;
         return -1;
     }
 
-    fstream corpus(project + ".corpus", ios_base::in | ios_base:: out);
+    ifstream corpus(project + ".corpus");
     if (!corpus) {
         cerr << "-Shuuseki: corpus not exist" << endl;
         return -1;
     }
 
     // Initialize
-    corpus.seekg(0, fstream::beg);
+    corpus.seekg(0, ifstream::beg);
 
     ifstream corpus_config(project + ".config");
     if (!corpus_config) {
-        cerr << "-Shuuseki: corpus_config not exist. It seems that your Corpus has been broken, please create new one" << endl;
+        cerr << "-Shuuseki: corpus_config not exist. It seems that your Corpus has been broken, please create new one"
+             << endl;
         return -1;
     }
 
@@ -188,7 +194,7 @@ int deleteCorpus(const vector<string> &files)
     vector<string> basic_info = readCorpusInfo(corpus_config);
 
     Shuuseki.CorpusName = basic_info[3];
-    if (basic_info[7] != "0" )
+    if (basic_info[7] != "0")
         Shuuseki.FileList = split(basic_info[7], ",");
     else
         Shuuseki.FileList = {};
@@ -198,29 +204,31 @@ int deleteCorpus(const vector<string> &files)
     ofstream temp("temp.corpus", ios_base::out | ios_base::app);
 
     ifstream info(Shuuseki.CorpusName + "_content.index", ios_base::in);
-    vector<string> srcVec = readCorpusInfo(info), updated_atom;
+    vector<string> srcVec = readCorpusInfo(info);
     vector<string> indice = getAbsIndice(srcVec);     // Get all files which has been imported
     vector<vector<string>> data = getConIndice(srcVec), updated_data;
     info.close();
+    int count = 0;
 
     for (auto &file : files) {
         // Get the file index first
-        vector<string> goal, lines;
+        vector<string> goal;
         int pos = match(indice, file);
         if (pos == -1) continue;
 
         goal = data[pos];                                  // Get the index of the file
 
-        long long start_mark = stoll(goal[1]), end_mark = stoll(goal[2]);  // Get the start point of the file we want to delete
-        string s;
-
-        while (corpus && corpus.tellg() < start_mark && getline(corpus, s)) {
-            lines.push_back(s);                                            // Get the content before the file[waiting for being deleted]
+        // Get the start point of the file we want to delete
+        long long start = corpus.tellg(), end = stoll(goal[1], nullptr, 10), end_mark = stoll(goal[2], nullptr, 10);
+        std::string s;
+        // Get the content before the file[waiting for being deleted]
+        if (corpus.is_open()) {
+            corpus.seekg(start);
+            s.resize(end - start);
+            corpus.read(&s[0], end - start);
         }
 
-        for (auto &line : lines) {
-            temp << line;
-        }
+        temp << s;
 
         // Skip to the end point of the file[waiting for being deleted]
         corpus.seekg(end_mark);
@@ -228,17 +236,18 @@ int deleteCorpus(const vector<string> &files)
         // Now delete the file in indice and data
         indice.erase(indice.begin() + pos);
         data.erase(data.begin() + pos);
+        count += 1;
     }
 
     // Next update new starting points and ending points
     for (int i = 0; i < data.size(); ++i) {
-        updated_atom = data[i];
+        vector<string> updated_atom = data[i];
         if (i == 0) {
             updated_atom[2] = to_string(stoll(data[i][2]) - stoll(data[i][1]));
             updated_atom[1] = "0";
         } else {
             updated_atom[2] = to_string(stoll(data[i][2]) - stoll(data[i][1]) + stoll(updated_data[i - 1][2]));
-            updated_atom[1] = updated_data[i - 1][1];
+            updated_atom[1] = updated_data[i - 1][2];
         }
 
         updated_data.push_back(updated_atom);
@@ -251,22 +260,22 @@ int deleteCorpus(const vector<string> &files)
     if (data.empty()) {
         rest_mark = 0;
     } else {
-        rest_mark = stoll(updated_data.back().back());
+        rest_mark = stoll((data.back()).back());
     }
 
-    while (corpus && corpus.tellg() < rest_mark)  {
-        getline(corpus, residue);
+    while (corpus && corpus.tellg() < rest_mark && getline(corpus, residue))  {
         surplus.push_back(residue);
     }
+
 
     for (auto &r : surplus) {
         temp << r;
     }
-
+    corpus.close();
     temp.close();
 
     // Store the updated content to Corpus
-    corpus.trunc;
+    ofstream updated_corpus(Shuuseki.CorpusName + ".corpus");
     ifstream compelete_temp("temp.corpus", ios_base::in);
     vector<string> texts;
     string t;
@@ -277,11 +286,12 @@ int deleteCorpus(const vector<string> &files)
     }
 
     for (auto &text : texts) {
-        corpus << text;
+        updated_corpus << text;
     }
 
-    corpus.close();
+    updated_corpus.close();
     compelete_temp.close();
+
     remove("temp.corpus");
 
     // Update the index and config
@@ -301,7 +311,7 @@ int deleteCorpus(const vector<string> &files)
         updated_index << "End Point: " << piece[2] <<" ;";
     }
 
-    cout << "-Shuuseki: You has delete those contents successfully from Corpus [" + Shuuseki.CorpusName + "]" << endl;
+    cout << "-Shuuseki: You has delete " + to_string(count) + " files successfully from Corpus [" + Shuuseki.CorpusName + "]" << endl;
 
     return 0;
 }

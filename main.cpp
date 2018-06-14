@@ -8,6 +8,13 @@ int main()
 {
     initialize();
 
+    cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
+    cout << "You are able to use various of commands to manage your corpora, such like this: " << endl;
+    cout << "   [create] [corpus name]" << endl;
+    cout << "   [open] [corpus name]" << endl;
+    cout << "   [import] [file name] [file name] [...]" << endl;
+    cout << "   [delete] [file name] [file name] [...]" << endl;
+
     string s;
     while (true) {
         cout << ">>> ";
