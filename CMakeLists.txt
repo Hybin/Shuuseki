@@ -3,6 +3,6 @@ project(Shuuseki)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(Shuuseki main.cpp include/Corpus.h operations.cpp init.cpp encoding.cpp include/CodeConverter.h)
+add_executable(Shuuseki main.cpp include/Corpus.h operations.cpp init.cpp encoding.cpp include/CodeConverter.h sort.cpp)
 
 target_link_libraries(Shuuseki iconv)

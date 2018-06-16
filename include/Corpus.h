@@ -47,5 +47,6 @@ int isutf8(const char *s, size_t ns);
 
 int transform(const std::string &file);
 
+// sort.cpp
 
 #endif //SHUUSEKI_CORPUS_H

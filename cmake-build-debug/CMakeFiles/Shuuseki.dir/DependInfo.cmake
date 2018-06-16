@@ -4,12 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "Z:/CLionProjects/Shuuseki/encoding.cpp" "Z:/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/encoding.cpp.obj"
-  "Z:/CLionProjects/Shuuseki/init.cpp" "Z:/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/init.cpp.obj"
-  "Z:/CLionProjects/Shuuseki/main.cpp" "Z:/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/main.cpp.obj"
-  "Z:/CLionProjects/Shuuseki/operations.cpp" "Z:/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/operations.cpp.obj"
+  "/Users/Hybin/CLionProjects/Shuuseki/encoding.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/encoding.cpp.o"
+  "/Users/Hybin/CLionProjects/Shuuseki/init.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/init.cpp.o"
+  "/Users/Hybin/CLionProjects/Shuuseki/main.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/main.cpp.o"
+  "/Users/Hybin/CLionProjects/Shuuseki/operations.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/operations.cpp.o"
+  "/Users/Hybin/CLionProjects/Shuuseki/sort.cpp" "/Users/Hybin/CLionProjects/Shuuseki/cmake-build-debug/CMakeFiles/Shuuseki.dir/sort.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "GNU")
+set(CMAKE_CXX_COMPILER_ID "AppleClang")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
