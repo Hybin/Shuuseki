@@ -6,6 +6,7 @@ using namespace std;
 
 int main()
 {
+    /*
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
@@ -34,7 +35,7 @@ int main()
             corpusName = s.substr(mark + 1, s.size() - mark - 1);
 
         if (corpusCmd == "create") create(corpusName);
-        if (corpusCmd == "open") openCorpus(corpusName);
+        if (corpusCmd == "open") open(corpusName);
 
         if (corpusCmd == "import" || corpusCmd == "delete") {
             fileName = s.substr(mark + 1, s.size() - mark - 1);
@@ -46,20 +47,11 @@ int main()
         }
 
         if (corpusCmd == "delete") {
-            if (deleteCorpus(files) == -1) continue;
+            if (remove(files) == -1) continue;
         }
 
-    }
-    /*
-    ifstream in("dream.txt", ios_base::binary | ios_base::ate);
-    in.seekg(0, in.end);
-    long long end_mark = in.tellg();
-    in.seekg(0, ifstream::beg);
-    auto *buffer = new char[end_mark];
-    in.read(buffer, end_mark);
-    cout << strlen(buffer);
-    delete[] buffer;
-    in.close();
-     */
+    }*/
+    string s = "Jumoku.corpus";
+    getStingFromCorpus(s);
     return 0;
 }

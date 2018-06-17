@@ -24,7 +24,7 @@ int isutf8(const char *s, size_t ns)
             n = nbytes = (8 - i);
             for(j = 0; (j < nbytes && j < ns); j++)
             {
-                if((uint8_t)s[j] <= 0x80 && (uint8_t)s[j] >= 0xc0)break;
+                if((uint8_t)s[j] <= 0x80 && (uint8_t)s[j] >= 0xc0) break;
                 else n--;
             }
             if(n == 0) return nbytes;

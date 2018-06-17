@@ -29,9 +29,9 @@ int match(std::vector<std::string> &src, const std::string &s);
 
 // operations.cpp
 int create(const std::string &corpusName);
-int openCorpus(const std::string &corpusName);
+int open(const std::string &corpusName);
 int import(const std::vector<std::string> &files);
-int deleteCorpus(const std::vector<std::string> &files);
+int remove(const std::vector<std::string> &files);
 
 // encoding.cpp
 // Check the encoding of the contents
@@ -47,6 +47,7 @@ int isutf8(const char *s, size_t ns);
 
 int transform(const std::string &file);
 
-// sort.cpp
+std::vector<std::string> getStingFromCorpus(std::string &corpus);
+std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines)
 
 #endif //SHUUSEKI_CORPUS_H

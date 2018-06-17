@@ -47,7 +47,7 @@ int create(const string &corpusName)
     return 0;
 }
 
-int openCorpus(const string &corpusName)
+int open(const string &corpusName)
 {
     string cmd;
 
@@ -167,7 +167,7 @@ int import(const vector<string> &files)
     return 0;
 }
 
-int deleteCorpus(const vector<string> &files) {
+int remove(const vector<string> &files) {
     if (project.empty()) {
         cerr << "-Shuuseki: Caution: You may need to create a Corpus or open one" << endl;
         return -1;

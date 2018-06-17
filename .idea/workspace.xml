@@ -97,7 +97,7 @@
         <entry file="file://$PROJECT_DIR$/sort.cpp">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -250,12 +250,12 @@
       <workItem from="1528948039727" duration="427000" />
       <workItem from="1528952099867" duration="1025000" />
       <workItem from="1528981860506" duration="17000" />
-      <workItem from="1529152690956" duration="129000" />
+      <workItem from="1529152690956" duration="200000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108431000" />
+    <option name="totallyTimeSpent" value="108502000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="821" extended-state="6" />
@@ -453,7 +453,7 @@
     <entry file="file://$PROJECT_DIR$/sort.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
