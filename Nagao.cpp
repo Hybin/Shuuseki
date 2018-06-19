@@ -20,18 +20,19 @@ vector<string> getStingFromCorpus(string &corpus)
             continue;
         }
     }
-
+    cout << lines.size() << endl;
     in.close();
     return lines;
 }
 
 vector<string> removeEmptyLines(vector<string> &lines)
 {
-    for (int i = 0; i < lines.size(); ++i) {
-        if (lines[i].size() == 1)
-            lines.erase(lines.begin() + (i - 1));
-        else
-            continue;
+    vector<string> sentences;
+    for (auto &i : lines) {
+        if (i.size() > 1)
+            sentences.push_back(trim(i));
     }
-    return lines;
+    cout << sentences.size() << endl;
+    return sentences;
 }
+

@@ -3,6 +3,9 @@
 //
 
 #include <iostream>
+#include <functional>
+#include <cctype>
+#include <locale>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -129,4 +132,35 @@ int match(vector<string> &src, const string &s)
         return static_cast<int>(goal - src.begin());
     else
         return -1;
+}
+
+// Well, 3 function blow just erase the '\0' after the line, NOT spaces(in Chinese)
+// trim from start
+string &ltrim(string &s) {
+    s.erase(s.begin(), find_if(s.begin(), s.end(),
+                               not1(std::ptr_fun<int, int>(isspace))));
+    return s;
+}
+
+// trim from end
+std::string &rtrim(std::string &s) {
+    s.erase(find_if(s.rbegin(), s.rend(),
+                    not1(ptr_fun<int, int>(isspace))).base(), s.end());
+    return s;
+}
+
+// trim from both ends
+string &trim(string &s) {
+    return ltrim(rtrim(s));
+}
+
+// Trying to delete all spaces in Chinese(0x20)
+string &atrim(string &s)
+{
+    string res = "";
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] != 0x20)
+            res += s[i];
+    }
+    return res;
 }

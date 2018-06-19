@@ -26,12 +26,21 @@ std::string vector2string(std::vector<std::string> vec);
 std::vector<std::string> getAbsIndice(std::vector<std::string> &src);
 std::vector<std::vector<std::string>> getConIndice(std::vector<std::string> &src);
 int match(std::vector<std::string> &src, const std::string &s);
+std::string &rtrim(std::string &s);
+std::string &trim(std::string &s);
+std::string &ltrim(std::string &s);
+std::string &atrim(std::string &s); // Advenced Trim
 
 // operations.cpp
+// Create a new Corpus
 int create(const std::string &corpusName);
+// Open a Corpus
 int open(const std::string &corpusName);
+// Import file(s) into corpus
 int import(const std::vector<std::string> &files);
+// Remove content from corpus
 int remove(const std::vector<std::string> &files);
+// Show corpus status
 
 // encoding.cpp
 // Check the encoding of the contents
@@ -48,6 +57,7 @@ int isutf8(const char *s, size_t ns);
 int transform(const std::string &file);
 
 std::vector<std::string> getStingFromCorpus(std::string &corpus);
-std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines)
+std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines);
+std::vector<std::vector<std::string>> splitLine(std::string);
 
 #endif //SHUUSEKI_CORPUS_H
