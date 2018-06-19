@@ -321,3 +321,54 @@ int remove(const vector<string> &files) {
 
     return 0;
 }
+
+int show(const string &corpusName)
+{
+    if (project.empty()) {
+        cerr << "-Shuuseki: Caution: You may need to create a Corpus or open one" << endl;
+        return -1;
+    }
+
+    ifstream corpus(project + ".corpus");
+    if (!corpus) {
+        cerr << "-Shuuseki: corpus not exist" << endl;
+        return -1;
+    }
+
+    // Initialize
+    corpus.seekg(0, ifstream::beg);
+
+    ifstream corpus_config(project + ".config");
+    if (!corpus_config) {
+        cerr << "-Shuuseki: corpus_config not exist. It seems that your Corpus has been broken, please create new one"
+             << endl;
+        return -1;
+    }
+
+    // Create an Object to store the information.
+    Corpus Shuuseki;
+    vector<string> basic_info = readCorpusInfo(corpus_config);
+
+    Shuuseki.CorpusName = basic_info[3];
+    if (basic_info[7] != "0")
+        Shuuseki.FileList = split(basic_info[7], ",");
+    else
+        Shuuseki.FileList = {};
+
+    corpus_config.close();
+
+    ifstream info(Shuuseki.CorpusName + "_content.index", ios_base::in);
+    vector<string> srcVec = readCorpusInfo(info);
+    vector<vector<string>> data = getConIndice(srcVec);
+    info.close();
+
+    int charactersNum = 0;
+    for (auto &piece : data) {
+        charactersNum += stoi(piece[3]);
+    }
+
+    cout << "- Shuuseki: In Corpus [" + Shuuseki.CorpusName + "], there are " + to_string(Shuuseki.FileList.size()) + " imported files, "
+         << "almost " + to_string(charactersNum) + " characters(Kanji or English words, including Chinese Punctuate Marks)." << endl;
+
+    return 0;
+}

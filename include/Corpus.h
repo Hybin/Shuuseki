@@ -46,6 +46,7 @@ int import(const std::vector<std::string> &files);
 // Remove content from corpus
 int remove(const std::vector<std::string> &files);
 // Show corpus status
+int show(const std::string &corpusName);
 
 // encoding.cpp
 // Check the encoding of the contents
