@@ -6,7 +6,6 @@ using namespace std;
 
 int main()
 {
-    /*
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
@@ -50,11 +49,6 @@ int main()
             if (remove(files) == -1) continue;
         }
 
-    }*/
-    string s = "Jumoku.corpus", t = "甄士隐梦幻识通灵  贾雨村风尘怀闺秀";
-    vector<string> lines = getStingFromCorpus(s);
-    lines = removeEmptyLines(lines);
-    cout << lines[1].size() << lines[1] << endl;
-    cout << atrim(t).size();
+    }
     return 0;
 }

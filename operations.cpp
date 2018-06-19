@@ -119,6 +119,7 @@ int import(const vector<string> &files)
         }
 
         string encoding = checkEncoding(file);
+        int charCount = 0;
 
         if ((encoding != "UTF-8") && (encoding != "UTF-8 with BOM")) {
             transform(file);
@@ -126,16 +127,18 @@ int import(const vector<string> &files)
             ifstream transformed("convert-output.txt", ios_base::in);
             string s;
             while (getline(transformed, s)) {
+                charCount += countKanji(s);
                 imported_corpus << s;
             }
             transformed.close();
+
             remove("convert-output.txt");
         } else {
             string t;
             vector<string> texts;
             while (getline(in, t)) {
+                charCount += countKanji(t);
                 texts.push_back(t);
-
             }
 
             for (auto &text : texts) {
@@ -151,11 +154,13 @@ int import(const vector<string> &files)
         content_index << "File: " << file << " ;";
         content_index << "Start Point: " << start_mark << " ;";
         content_index << "End Point: " << end_mark <<" ;";
+        content_index << "Characters Number: " << charCount << " ;";
         content_index.close();
 
         in.close();
 
         count += 1;
+        charCount = 0;
     }
 
     fstream updated_corpus_config(project + ".config", ios_base::out | ios_base::trunc);
@@ -309,6 +314,7 @@ int remove(const vector<string> &files) {
         updated_index << "File: " << piece[0] << " ;";
         updated_index << "Start Point: " << piece[1] << " ;";
         updated_index << "End Point: " << piece[2] <<" ;";
+        updated_index << "Characters Number: " << piece[3] <<" ;";
     }
 
     cout << "-Shuuseki: You has delete " + to_string(count) + " files successfully from Corpus [" + Shuuseki.CorpusName + "]" << endl;

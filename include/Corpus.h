@@ -30,6 +30,11 @@ std::string &rtrim(std::string &s);
 std::string &trim(std::string &s);
 std::string &ltrim(std::string &s);
 std::string &atrim(std::string &s); // Advenced Trim
+bool isPuncMark(const char &c);     // Check if it is an English Punctuation Mark
+bool isDigitOrAlphabet(const char &c);
+std::vector<int> getLenOfNonKanji(std::vector<int> &m);
+int countKanji(std::string &s);
+
 
 // operations.cpp
 // Create a new Corpus
@@ -58,6 +63,5 @@ int transform(const std::string &file);
 
 std::vector<std::string> getStingFromCorpus(std::string &corpus);
 std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines);
-std::vector<std::vector<std::string>> splitLine(std::string);
 
 #endif //SHUUSEKI_CORPUS_H
