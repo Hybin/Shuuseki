@@ -370,5 +370,7 @@ int show(const string &corpusName)
     cout << "- Shuuseki: In Corpus [" + Shuuseki.CorpusName + "], there are " + to_string(Shuuseki.FileList.size()) + " imported files, "
          << "almost " + to_string(charactersNum) + " characters(Kanji or English words, including Chinese Punctuate Marks)." << endl;
 
+    // Count the occurrences of characters
+
     return 0;
 }

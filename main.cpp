@@ -6,6 +6,7 @@ using namespace std;
 
 int main()
 {
+    /*
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
@@ -59,6 +60,12 @@ int main()
             }
         }
 
+    }
+     */
+    string s = "“苏小妹”是同船男学生为苏小姐起的个号。“东坡”2个字给鲍小姐南洋口音念得好像4444法国话里的“坟墓”（ｔｏｍｂｅａｕ）。苏小姐gen鲍小姐同舱，睡的是xia铺，比鲍小姐方便得多，";
+    cout << countOccurence(s).size() << endl;
+    for (auto &i : countOccurence(s)) {
+        cout << i << " | ";
     }
     return 0;
 }

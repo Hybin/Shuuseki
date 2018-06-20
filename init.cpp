@@ -6,6 +6,7 @@
 #include <functional>
 #include <cctype>
 #include <locale>
+#include <map>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -190,6 +191,20 @@ bool isDigitOrAlphabet(const char &c)
     return false;
 }
 
+bool isCNdigitOrAlphabet(const string &s)
+{
+    vector<string> cnDitAl = {"efbca1", "efbca2", "efbca3", "efbca4", "efbca5", "efbca6", "efbca7", "efbca8", "efbca9", "efbcaa", "efbcab", "efbcac", "efbcad",
+                              "efbcae", "efbcaf", "efbcb0", "efbcb1", "efbcb2", "efbcb3", "efbcb4", "efbcb5", "efbcb6", "efbcb7", "efbcb8", "efbcb9", "efbcba",
+                              "efbd81", "efbd82", "efbd83", "efbd84", "efbd85", "efbd86", "efbd87", "efbd88", "efbd89", "efbd8a", "efbd8b", "efbd8c", "efbd8d",
+                              "efbd8e", "efbd8f", "efbd90", "efbd91", "efbd92", "efbd93", "efbd94", "efbd95", "efbd96", "efbd97", "efbd98", "efbd99", "efbd9a",
+                              "efbc90", "efbc91", "efbc92", "efbc93", "efbc94", "efbc95", "efbc96", "efbc97", "efbc98", "efbc99"};
+
+    for (auto &k : cnDitAl) {
+        if (s == k) return true;
+    }
+    return false;
+}
+
 vector<int> getLenOfNonKanji(vector<int> &m)
 {
     vector<int> n, res;
@@ -214,7 +229,7 @@ vector<int> getLenOfNonKanji(vector<int> &m)
 int countKanji(string &s)
 {
     const char *line = atrim(trim(s)).c_str();
-    vector<int> characters;
+    vector<int> characters;                    // Occurrences of Digits or Alphabets
 
     int lenOfDigitOrAlphabet, sizeOfLine = static_cast<int>(string(line).size()), lenOfLine;
 
@@ -232,6 +247,94 @@ int countKanji(string &s)
     lenOfLine = (sizeOfLine / 3) + lenOfDigitOrAlphabet;
 
     return lenOfLine;
+}
+
+string string_to_hex(const string& input)
+{
+    static const char* const lut = "0123456789abcdef";
+    size_t len = input.length();
+
+    string output;
+    output.reserve(2 * len);
+    for (size_t i = 0; i < len; ++i)
+    {
+        const unsigned char c = input[i];
+        output.push_back(lut[c >> 4]);
+        output.push_back(lut[c & 15]);
+    }
+    return output;
+}
+
+string hex_to_string(const string& input)
+{
+    static const char* const lut = "0123456789abcdef";
+    size_t len = input.length();
+    if (len & 1) throw invalid_argument("odd length");
+
+    string output;
+    output.reserve(len / 2);
+    for (size_t i = 0; i < len; i += 2)
+    {
+        char a = input[i];
+        const char* p = lower_bound(lut, lut + 16, a);
+        if (*p != a) throw invalid_argument("not a hex digit");
+
+        char b = input[i + 1];
+        const char* q = lower_bound(lut, lut + 16, b);
+        if (*q != b) throw invalid_argument("not a hex digit");
+
+        output.push_back(((p - lut) << 4) | (q - lut));
+    }
+    return output;
+}
+
+vector<string> countOccurence(string &s)
+{
+    const char *line = atrim(trim(s)).c_str();
+    string digOrAlpha, kanjiStr;
+    vector<string> digitOrAlphabet;
+
+    // Get digits and alphabets with English Encoding
+    for (char &i : string(line)) {
+        if (isDigitOrAlphabet(i)) {
+            digOrAlpha += i;
+        } else {
+            if (!digOrAlpha.empty()) {
+                digitOrAlphabet.push_back(digOrAlpha);
+                digOrAlpha.clear();
+            }
+            kanjiStr += i;
+        }
+    }
+
+    // Get digits and alphabets with Chinese Encoding
+    // A-Z a-z 0-9 () ，。？！：；、．《 》'' " "
+    vector<string> cnSigns = {"efb999", "efb99a", "efbc8c", "e38081", "e38082", "efbc8e", "efbc9b", "efbc9a", "efbc9f", "efbc81", "e3808a", "e3808b", "e28098",
+                              "e28099", "e2809c", "e2809d"};
+
+    vector<string> chars;
+    for (int j = 0; j < kanjiStr.size(); j += 3) {
+        char tmp[4];
+        tmp[0] = kanjiStr[j];
+        tmp[1] = kanjiStr[j + 1];
+        tmp[2] = kanjiStr[j + 2];
+        tmp[3] = '\0';
+        chars.push_back(string_to_hex(tmp));
+    }
+
+    string word;
+    for (auto &k : chars) {
+        if (isCNdigitOrAlphabet(k))
+            word += hex_to_string(k);
+        else
+            if (!word.empty()) {
+                digitOrAlphabet.push_back(word);
+                word.clear();
+            }
+    }
+    // Now count the occurrences of words
+    map<char, int> wordOccurence;
+    return digitOrAlphabet;
 }
 
 

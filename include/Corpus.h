@@ -8,8 +8,11 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <cstdio>
 #include <algorithm>
+#include <utility>
+#include <stdexcept>
 
 class Corpus {
 public:
@@ -32,9 +35,12 @@ std::string &ltrim(std::string &s);
 std::string &atrim(std::string &s); // Advenced Trim
 bool isPuncMark(const char &c);     // Check if it is an English Punctuation Mark
 bool isDigitOrAlphabet(const char &c);
+bool isCNdigitOrAlphabet(const std::string &s);
 std::vector<int> getLenOfNonKanji(std::vector<int> &m);
 int countKanji(std::string &s);
-
+std::vector<std::string> countOccurence(std::string &s);
+std::string string_to_hex(const std::string &input);
+std::string hex_to_string(const std::string &input);
 
 // operations.cpp
 // Create a new Corpus
