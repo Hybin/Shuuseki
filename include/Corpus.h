@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <utility>
 #include <stdexcept>
+#include <map>
 
 class Corpus {
 public:
@@ -38,7 +39,7 @@ bool isDigitOrAlphabet(const char &c);
 bool isCNdigitOrAlphabet(const std::string &s);
 std::vector<int> getLenOfNonKanji(std::vector<int> &m);
 int countKanji(std::string &s);
-std::vector<std::string> countOccurence(std::string &s);
+std::vector<std::string> countOccurence(std::string &s, std::map<std::string, int> &wordOccurence);
 std::string string_to_hex(const std::string &input);
 std::string hex_to_string(const std::string &input);
 

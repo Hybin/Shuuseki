@@ -6,7 +6,7 @@
 #include <functional>
 #include <cctype>
 #include <locale>
-#include <map>
+#include <set>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -288,7 +288,7 @@ string hex_to_string(const string& input)
     return output;
 }
 
-vector<string> countOccurence(string &s)
+vector<string> countOccurence(string &s, map<string, int> &wordOccurence)
 {
     const char *line = atrim(trim(s)).c_str();
     string digOrAlpha, kanjiStr;
@@ -308,11 +308,12 @@ vector<string> countOccurence(string &s)
     }
 
     // Get digits and alphabets with Chinese Encoding
-    // A-Z a-z 0-9 () ，。？！：；、．《 》'' " "
-    vector<string> cnSigns = {"efb999", "efb99a", "efbc8c", "e38081", "e38082", "efbc8e", "efbc9b", "efbc9a", "efbc9f", "efbc81", "e3808a", "e3808b", "e28098",
-                              "e28099", "e2809c", "e2809d"};
+    // And count the occurrences of words
+    // () ，。？！：；、．《 》'' " "
+    set<string> cnSigns = {"efbc88", "efbc89", "efb999", "efb99a", "efbc8c", "e38081", "e38082", "efbc8e", "efbc9b",
+                           "efbc9a", "efbc9f", "efbc81", "e3808a", "e3808b", "e28098", "e28099", "e2809c", "e2809d"};
 
-    vector<string> chars;
+    vector<string> chars, realKanjiStr;
     for (int j = 0; j < kanjiStr.size(); j += 3) {
         char tmp[4];
         tmp[0] = kanjiStr[j];
@@ -324,17 +325,29 @@ vector<string> countOccurence(string &s)
 
     string word;
     for (auto &k : chars) {
-        if (isCNdigitOrAlphabet(k))
+        if (isCNdigitOrAlphabet(k)) {
             word += hex_to_string(k);
-        else
+        } else {
             if (!word.empty()) {
                 digitOrAlphabet.push_back(word);
                 word.clear();
             }
+            realKanjiStr.push_back(hex_to_string(k));
+        }
     }
-    // Now count the occurrences of words
-    map<char, int> wordOccurence;
-    return digitOrAlphabet;
+
+    for (auto &l : realKanjiStr) {
+        if (cnSigns.find(string_to_hex(l)) == cnSigns.end())
+            ++wordOccurence[l];
+    }
+
+    for (auto &m : digitOrAlphabet)
+        ++wordOccurence[m];
+
+    for (const auto &w : wordOccurence)
+        cout << w.first << " occurs " << w.second << ((w.second > 1) ? " times" : " time") << endl;
+
+    return realKanjiStr;
 }
 
 
