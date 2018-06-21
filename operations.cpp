@@ -128,7 +128,7 @@ int import(const vector<string> &files)
             string s;
             while (getline(transformed, s)) {
                 charCount += countKanji(s);
-                imported_corpus << s;
+                imported_corpus << s << endl;
             }
             transformed.close();
 
@@ -142,7 +142,7 @@ int import(const vector<string> &files)
             }
 
             for (auto &text : texts) {
-                imported_corpus << text;
+                imported_corpus << text << endl;
             }
         }
 
@@ -370,7 +370,30 @@ int show(const string &corpusName)
     cout << "- Shuuseki: In Corpus [" + Shuuseki.CorpusName + "], there are " + to_string(Shuuseki.FileList.size()) + " imported files, "
          << "almost " + to_string(charactersNum) + " characters(Kanji or English words, including Chinese Punctuate Marks)." << endl;
 
+    cout << "  And later you will see the Kanji with top 10 occurrences. Please wait for a minute......(only if your Corpus is big)" << endl;
+
     // Count the occurrences of characters
+    map<string, int> wordOccurences;
+    string str;
+
+    while (getline(corpus, str)) {
+        countOccurence(str, wordOccurences);
+    }
+
+    // Sort the map
+    struct IntCmp {
+        bool operator()(const pair<string, int> &lhs, const pair<string, int> &rhs) {
+            return lhs.second > rhs.second;
+        }
+    };
+
+    vector<pair<string, int>> result(wordOccurences.begin(), wordOccurences.end());
+
+    partial_sort(result.begin(), result.begin() + 10, result.end(), IntCmp());
+
+    for (int i = 0; i < 10; ++i) {
+        cout << result[i].first << " occurs " << result[i].second << ((result[i].second > 1) ? " times" : " time") << endl;
+    }
 
     return 0;
 }

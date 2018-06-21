@@ -6,7 +6,6 @@
 #include <functional>
 #include <cctype>
 #include <locale>
-#include <set>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -171,8 +170,9 @@ bool isPuncMark(const char &c)
 {
     // .2e :3a ,2c "22 ?3f -2d !21 '27 `60 <3c >3e @40 #23 $24 =3d
     // [5b ]5d {7b }7d /2f \5c |7c ~7e %25 ^5e &26 *2a (28 )29 +2b
-    vector<int> mark = {0x2e, 0x3a, 0x2c, 0x22, 0x3f, 0x2d, 0x21, 0x27, 0x60, 0x3c, 0x3e, 0x5b, 0x5d, 0x7b, 0x7d,
-                        0x40, 0x23, 0x24, 0x25, 0x5e, 0x26, 0x2a, 0x28, 0x29, 0x2b, 0x3d, 0x2f, 0x5c, 0x7c, 0x7e};
+    vector<int> mark = {0x2e, 0x3a, 0x2c, 0x22, 0x3f, 0x2d, 0x21, 0x27, 0x60, 0x3c, 0x3e, 0x5b, 0x5d, 0x7b, 0x7d, 0x56,
+                        0x40, 0x23, 0x24, 0x25, 0x5e, 0x26, 0x2a, 0x28, 0x29, 0x2b, 0x3d, 0x2f, 0x5c, 0x7c, 0x7e, 0x3b,
+                        0x57, 0x5f};
     for (auto &m : mark) {
         if (m == c) return true;
     }
@@ -203,6 +203,21 @@ bool isCNdigitOrAlphabet(const string &s)
         if (s == k) return true;
     }
     return false;
+}
+
+string clean(string &s, string &r)
+{
+    string res;
+    size_t found = s.find(r);
+
+    while (found != string::npos) {
+        res += s.substr(0, found);
+        s = s.substr(r.size() + found);
+        found = s.find(r);
+    }
+    res += s;
+
+    return hex_to_string(res);
 }
 
 vector<int> getLenOfNonKanji(vector<int> &m)
@@ -291,7 +306,7 @@ string hex_to_string(const string& input)
 vector<string> countOccurence(string &s, map<string, int> &wordOccurence)
 {
     const char *line = atrim(trim(s)).c_str();
-    string digOrAlpha, kanjiStr;
+    string digOrAlpha, kanjiStr, tmpStr;
     vector<string> digitOrAlphabet;
 
     // Get digits and alphabets with English Encoding
@@ -307,11 +322,28 @@ vector<string> countOccurence(string &s, map<string, int> &wordOccurence)
         }
     }
 
+    tmpStr = string_to_hex(kanjiStr);
+    vector<string> specSig = {"c2b7", "c2a7", "c397", "c3b7", "c2b1", "c2b0", "cb99", "cb89", "cb8a", "cb87", "cb8b",
+                              "d094", "d095", "d081", "d096", "d097", "d098", "d099", "d09a", "d09b", "d09c", "d0a3",
+                              "d0a4", "d0a5", "d0a6", "d0a7", "d0a8", "d0a9", "d0aa", "d0ab", "d0ac", "d0ad", "d0ae",
+                              "d0af", "d0b0", "d0b1", "d0b2", "d0b3", "d0b4", "d0b5", "d191", "d0b6", "d0b7", "d0b8",
+                              "d0b9", "d0ba", "d0bb", "d0bc", "d0bd", "d0be", "d0bf", "d180", "d181", "d182", "d183",
+                              "d184", "d185", "d186", "d187", "d188", "d189", "d18a", "d18b", "d18c", "d18d", "d18e",
+                              "d18f", "ceb1", "ceb2", "ceb3", "ceb4", "ceb5", "ceb6", "ceb7", "ceb8", "d09f", "d093",
+                              "ceb9", "ceba", "cebb", "cebc", "cebd", "cebe", "cebf", "cf80", "cf81", "cf83", "cf84",
+                              "cf85", "cf86", "cf87", "cf88", "cf89", "d09e", "d09d", "d090", "d091", "d092", "d0a0",
+                              "d0a2", "cea6"};
+
+    for (auto &ss : specSig) {
+        kanjiStr = clean(tmpStr, ss);
+    }
+
     // Get digits and alphabets with Chinese Encoding
     // And count the occurrences of words
     // () ，。？！：；、．《 》'' " "
     set<string> cnSigns = {"efbc88", "efbc89", "efb999", "efb99a", "efbc8c", "e38081", "e38082", "efbc8e", "efbc9b",
-                           "efbc9a", "efbc9f", "efbc81", "e3808a", "e3808b", "e28098", "e28099", "e2809c", "e2809d"};
+                           "efbc9a", "efbc9f", "efbc81", "e3808a", "e3808b", "e28098", "e28099", "e2809c", "e2809d",
+                           "e29480", "e280a6", "e38080", "e38090", "e38091", "efbc8d", "efb9a3", "e28094"};
 
     vector<string> chars, realKanjiStr;
     for (int j = 0; j < kanjiStr.size(); j += 3) {
@@ -343,9 +375,6 @@ vector<string> countOccurence(string &s, map<string, int> &wordOccurence)
 
     for (auto &m : digitOrAlphabet)
         ++wordOccurence[m];
-
-    for (const auto &w : wordOccurence)
-        cout << w.first << " occurs " << w.second << ((w.second > 1) ? " times" : " time") << endl;
 
     return realKanjiStr;
 }

@@ -14,6 +14,8 @@
 #include <utility>
 #include <stdexcept>
 #include <map>
+#include <set>
+#include <functional>
 
 class Corpus {
 public:
@@ -42,6 +44,7 @@ int countKanji(std::string &s);
 std::vector<std::string> countOccurence(std::string &s, std::map<std::string, int> &wordOccurence);
 std::string string_to_hex(const std::string &input);
 std::string hex_to_string(const std::string &input);
+std::string clean(std::string &s, std::string &r);
 
 // operations.cpp
 // Create a new Corpus
