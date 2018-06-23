@@ -220,7 +220,7 @@ string clean(string &s, string &r)
     return hex_to_string(res);
 }
 
-vector<int> getLenOfNonKanji(vector<int> &m)
+vector<int> getLenOfNonKanji(vector<int> &m)         // Get the number of English words
 {
     vector<int> n, res;
     for (int i = 0; i < m.size(); ++i) {
@@ -378,6 +378,8 @@ vector<string> countOccurence(string &s, map<string, int> &wordOccurence)
 
     return realKanjiStr;
 }
+
+
 
 
 

@@ -6,6 +6,7 @@ using namespace std;
 
 int main()
 {
+    /*
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
@@ -59,5 +60,12 @@ int main()
             }
         }
     }
+     */
+    string s = "Jumoku.corpus";
+    for (auto &k : splitSentence("我送youы离开в千ыmeыterы之out")) {
+        cout << k << " | ";
+    };
+    cout << endl;
+    cout << string_to_hex("我送you离开千里之out") << endl;
     return 0;
 }

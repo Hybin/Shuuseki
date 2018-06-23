@@ -72,7 +72,10 @@ int isutf8(const char *s, size_t ns);
 
 int transform(const std::string &file);
 
-std::vector<std::string> getStingFromCorpus(std::string &corpus);
+// Nagao.cpp
+std::vector<std::string> getStringFromCorpus(std::string &corpus);
 std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines);
+std::vector<std::string> splitSentence(const std::string &s);
+std::map<int, std::string> createPTable(const std::string &s);
 
 #endif //SHUUSEKI_CORPUS_H
