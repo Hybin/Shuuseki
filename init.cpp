@@ -155,115 +155,6 @@ string &trim(string &s) {
     return ltrim(rtrim(s));
 }
 
-// Trying to delete all spaces in Chinese(0x20)
-string &atrim(string &s)
-{
-    string res;
-    for (char &i : s) {
-        if (i != 0x20 && !isPuncMark(i))
-            res += i;
-    }
-    return res;
-}
-
-bool isPuncMark(const char &c)
-{
-    // .2e :3a ,2c "22 ?3f -2d !21 '27 `60 <3c >3e @40 #23 $24 =3d
-    // [5b ]5d {7b }7d /2f \5c |7c ~7e %25 ^5e &26 *2a (28 )29 +2b
-    vector<int> mark = {0x2e, 0x3a, 0x2c, 0x22, 0x3f, 0x2d, 0x21, 0x27, 0x60, 0x3c, 0x3e, 0x5b, 0x5d, 0x7b, 0x7d, 0x56,
-                        0x40, 0x23, 0x24, 0x25, 0x5e, 0x26, 0x2a, 0x28, 0x29, 0x2b, 0x3d, 0x2f, 0x5c, 0x7c, 0x7e, 0x3b,
-                        0x57, 0x5f};
-    for (auto &m : mark) {
-        if (m == c) return true;
-    }
-    return false;
-}
-
-bool isDigitOrAlphabet(const char &c)
-{
-    vector<int> digitOrAlphabets = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
-                                    0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a,
-                                    0x6b, 0x6c, 0x6d, 0x6e, 0x6f, 0x70, 0x71, 0x72, 0x73, 0x74,
-                                    0x75, 0x76, 0x77, 0x78, 0x79, 0x7a};
-    for (auto &d : digitOrAlphabets) {
-        if (d == c) return true;
-    }
-    return false;
-}
-
-bool isCNdigitOrAlphabet(const string &s)
-{
-    vector<string> cnDitAl = {"efbca1", "efbca2", "efbca3", "efbca4", "efbca5", "efbca6", "efbca7", "efbca8", "efbca9", "efbcaa", "efbcab", "efbcac", "efbcad",
-                              "efbcae", "efbcaf", "efbcb0", "efbcb1", "efbcb2", "efbcb3", "efbcb4", "efbcb5", "efbcb6", "efbcb7", "efbcb8", "efbcb9", "efbcba",
-                              "efbd81", "efbd82", "efbd83", "efbd84", "efbd85", "efbd86", "efbd87", "efbd88", "efbd89", "efbd8a", "efbd8b", "efbd8c", "efbd8d",
-                              "efbd8e", "efbd8f", "efbd90", "efbd91", "efbd92", "efbd93", "efbd94", "efbd95", "efbd96", "efbd97", "efbd98", "efbd99", "efbd9a",
-                              "efbc90", "efbc91", "efbc92", "efbc93", "efbc94", "efbc95", "efbc96", "efbc97", "efbc98", "efbc99"};
-
-    for (auto &k : cnDitAl) {
-        if (s == k) return true;
-    }
-    return false;
-}
-
-string clean(string &s, string &r)
-{
-    string res;
-    size_t found = s.find(r);
-
-    while (found != string::npos) {
-        res += s.substr(0, found);
-        s = s.substr(r.size() + found);
-        found = s.find(r);
-    }
-    res += s;
-
-    return hex_to_string(res);
-}
-
-vector<int> getLenOfNonKanji(vector<int> &m)         // Get the number of English words
-{
-    vector<int> n, res;
-    for (int i = 0; i < m.size(); ++i) {
-        if (i == 0) {
-            n.push_back(m[i]);
-        } else {
-            if (m[i] != m[i - 1]) {
-                n.push_back(m[i]);
-            }
-        }
-    }
-
-    for (int &j : n) {
-        if (j != 0) {
-            res.push_back(j);
-        }
-    }
-    return res;
-}
-
-int countKanji(string &s)
-{
-    const char *line = atrim(trim(s)).c_str();
-    vector<int> characters;                    // Occurrences of Digits or Alphabets
-
-    int lenOfDigitOrAlphabet, sizeOfLine = static_cast<int>(string(line).size()), lenOfLine;
-
-    for (char &i : string(line)) {
-        if (isDigitOrAlphabet(i)) {
-            sizeOfLine -= 1;
-            characters.push_back(1);
-        } else {
-            characters.push_back(0);
-        }
-    }
-
-    lenOfDigitOrAlphabet = static_cast<int>(getLenOfNonKanji(characters).size());
-
-    lenOfLine = (sizeOfLine / 3) + lenOfDigitOrAlphabet;
-
-    return lenOfLine;
-}
-
 string string_to_hex(const string& input)
 {
     static const char* const lut = "0123456789abcdef";
@@ -303,83 +194,16 @@ string hex_to_string(const string& input)
     return output;
 }
 
-vector<string> countOccurence(string &s, map<string, int> &wordOccurence)
+unsigned long countKanji(vector<string> &kanji)
 {
-    const char *line = atrim(trim(s)).c_str();
-    string digOrAlpha, kanjiStr, tmpStr;
-    vector<string> digitOrAlphabet;
-
-    // Get digits and alphabets with English Encoding
-    for (char &i : string(line)) {
-        if (isDigitOrAlphabet(i)) {
-            digOrAlpha += i;
-        } else {
-            if (!digOrAlpha.empty()) {
-                digitOrAlphabet.push_back(digOrAlpha);
-                digOrAlpha.clear();
-            }
-            kanjiStr += i;
-        }
-    }
-
-    tmpStr = string_to_hex(kanjiStr);
-    vector<string> specSig = {"c2b7", "c2a7", "c397", "c3b7", "c2b1", "c2b0", "cb99", "cb89", "cb8a", "cb87", "cb8b",
-                              "d094", "d095", "d081", "d096", "d097", "d098", "d099", "d09a", "d09b", "d09c", "d0a3",
-                              "d0a4", "d0a5", "d0a6", "d0a7", "d0a8", "d0a9", "d0aa", "d0ab", "d0ac", "d0ad", "d0ae",
-                              "d0af", "d0b0", "d0b1", "d0b2", "d0b3", "d0b4", "d0b5", "d191", "d0b6", "d0b7", "d0b8",
-                              "d0b9", "d0ba", "d0bb", "d0bc", "d0bd", "d0be", "d0bf", "d180", "d181", "d182", "d183",
-                              "d184", "d185", "d186", "d187", "d188", "d189", "d18a", "d18b", "d18c", "d18d", "d18e",
-                              "d18f", "ceb1", "ceb2", "ceb3", "ceb4", "ceb5", "ceb6", "ceb7", "ceb8", "d09f", "d093",
-                              "ceb9", "ceba", "cebb", "cebc", "cebd", "cebe", "cebf", "cf80", "cf81", "cf83", "cf84",
-                              "cf85", "cf86", "cf87", "cf88", "cf89", "d09e", "d09d", "d090", "d091", "d092", "d0a0",
-                              "d0a2", "cea6"};
-
-    for (auto &ss : specSig) {
-        kanjiStr = clean(tmpStr, ss);
-    }
-
-    // Get digits and alphabets with Chinese Encoding
-    // And count the occurrences of words
-    // () ，。？！：；、．《 》'' " "
-    set<string> cnSigns = {"efbc88", "efbc89", "efb999", "efb99a", "efbc8c", "e38081", "e38082", "efbc8e", "efbc9b",
-                           "efbc9a", "efbc9f", "efbc81", "e3808a", "e3808b", "e28098", "e28099", "e2809c", "e2809d",
-                           "e29480", "e280a6", "e38080", "e38090", "e38091", "efbc8d", "efb9a3", "e28094"};
-
-    vector<string> chars, realKanjiStr;
-    for (int j = 0; j < kanjiStr.size(); j += 3) {
-        char tmp[4];
-        tmp[0] = kanjiStr[j];
-        tmp[1] = kanjiStr[j + 1];
-        tmp[2] = kanjiStr[j + 2];
-        tmp[3] = '\0';
-        chars.push_back(string_to_hex(tmp));
-    }
-
-    string word;
-    for (auto &k : chars) {
-        if (isCNdigitOrAlphabet(k)) {
-            word += hex_to_string(k);
-        } else {
-            if (!word.empty()) {
-                digitOrAlphabet.push_back(word);
-                word.clear();
-            }
-            realKanjiStr.push_back(hex_to_string(k));
-        }
-    }
-
-    for (auto &l : realKanjiStr) {
-        if (cnSigns.find(string_to_hex(l)) == cnSigns.end())
-            ++wordOccurence[l];
-    }
-
-    for (auto &m : digitOrAlphabet)
-        ++wordOccurence[m];
-
-    return realKanjiStr;
+    return kanji.size();
 }
 
+int countOccurrence(vector<string> &kanji, map<string, int> &wordOccurrences)
+{
+    for (auto &i : kanji)
+        ++wordOccurrences[i];
 
-
-
+    return 0;
+}
 

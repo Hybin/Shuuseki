@@ -35,16 +35,11 @@ int match(std::vector<std::string> &src, const std::string &s);
 std::string &rtrim(std::string &s);
 std::string &trim(std::string &s);
 std::string &ltrim(std::string &s);
-std::string &atrim(std::string &s); // Advenced Trim
-bool isPuncMark(const char &c);     // Check if it is an English Punctuation Mark
-bool isDigitOrAlphabet(const char &c);
-bool isCNdigitOrAlphabet(const std::string &s);
-std::vector<int> getLenOfNonKanji(std::vector<int> &m);
-int countKanji(std::string &s);
-std::vector<std::string> countOccurence(std::string &s, std::map<std::string, int> &wordOccurence);
 std::string string_to_hex(const std::string &input);
 std::string hex_to_string(const std::string &input);
-std::string clean(std::string &s, std::string &r);
+// std::string clean(std::string &s, std::string &r);
+int countOccurrence(std::vector<std::string> &kanji, std::map<std::string, int> &wordOccurrences);
+unsigned long countKanji(std::vector<std::string> &kanji);
 
 // operations.cpp
 // Create a new Corpus
@@ -73,9 +68,8 @@ int isutf8(const char *s, size_t ns);
 int transform(const std::string &file);
 
 // Nagao.cpp
-std::vector<std::string> getStringFromCorpus(std::string &corpus);
+std::vector<std::string> getStringFromCorpus(std::fstream &in);
 std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines);
 std::vector<std::string> splitSentence(const std::string &s);
-std::map<int, std::string> createPTable(const std::string &s);
 
 #endif //SHUUSEKI_CORPUS_H

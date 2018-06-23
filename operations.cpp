@@ -119,7 +119,7 @@ int import(const vector<string> &files)
         }
 
         string encoding = checkEncoding(file);
-        int charCount = 0;
+        unsigned long charCount = 0;
 
         if ((encoding != "UTF-8") && (encoding != "UTF-8 with BOM")) {
             transform(file);
@@ -127,7 +127,6 @@ int import(const vector<string> &files)
             ifstream transformed("convert-output.txt", ios_base::in);
             string s;
             while (getline(transformed, s)) {
-                charCount += countKanji(s);
                 imported_corpus << s << endl;
             }
             transformed.close();
@@ -137,7 +136,6 @@ int import(const vector<string> &files)
             string t;
             vector<string> texts;
             while (getline(in, t)) {
-                charCount += countKanji(t);
                 texts.push_back(t);
             }
 
@@ -147,6 +145,13 @@ int import(const vector<string> &files)
         }
 
         end_mark = imported_corpus.tellg(); // Get the end point of the file after importing
+        imported_corpus.seekg(0, fstream::beg);
+        vector<string> lines = getStringFromCorpus(imported_corpus), sentences = removeEmptyLines(lines), kanji;
+        for (auto &l : sentences) {
+            vector<string> words = splitSentence(l);
+            kanji.insert(kanji.end(), words.begin(), words.end());
+        }
+        charCount = countKanji(kanji);
 
         Shuuseki.FileList.push_back(file);
         // Store the index of the content.
@@ -329,7 +334,7 @@ int show(const string &corpusName)
         return -1;
     }
 
-    ifstream corpus(project + ".corpus");
+    fstream corpus(project + ".corpus");
     if (!corpus) {
         cerr << "-Shuuseki: corpus not exist" << endl;
         return -1;
@@ -368,17 +373,19 @@ int show(const string &corpusName)
     }
 
     cout << "- Shuuseki: In Corpus [" + Shuuseki.CorpusName + "], there are " + to_string(Shuuseki.FileList.size()) + " imported files, "
-         << "almost " + to_string(charactersNum) + " characters(Kanji or English words, including Chinese Punctuate Marks)." << endl;
+         << "almost " + to_string(charactersNum) + " characters(Kanji or English words)." << endl;
 
-    cout << "  And later you will see the Kanji with top 10 occurrences. Please wait for a minute......(only if your Corpus is big)" << endl;
+    cout << "  And later you will see the Kanji with top 20 occurrences. Please wait for a minute......(only if your Corpus is big)" << endl;
 
     // Count the occurrences of characters
     map<string, int> wordOccurences;
-    string str;
-
-    while (getline(corpus, str)) {
-        countOccurence(str, wordOccurences);
+    vector<string> lines = getStringFromCorpus(corpus), sentences = removeEmptyLines(lines), kanji;
+    for (auto &l : sentences) {
+        vector<string> words = splitSentence(l);
+        kanji.insert(kanji.end(), words.begin(), words.end());
     }
+
+    countOccurrence(kanji, wordOccurences);
 
     // Sort the map
     struct IntCmp {
@@ -389,11 +396,12 @@ int show(const string &corpusName)
 
     vector<pair<string, int>> result(wordOccurences.begin(), wordOccurences.end());
 
-    partial_sort(result.begin(), result.begin() + 10, result.end(), IntCmp());
+    partial_sort(result.begin(), result.begin() + 20, result.end(), IntCmp());
 
-    for (int i = 0; i < 10; ++i) {
-        cout << result[i].first << " occurs " << result[i].second << ((result[i].second > 1) ? " times" : " time") << endl;
+    for (int i = 0; i < 20; ++i) {
+        cout << "  " << result[i].first << " occurs " << result[i].second << ((result[i].second > 1) ? " times" : " time") << endl;
     }
+
 
     return 0;
 }
