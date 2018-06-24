@@ -3,10 +3,10 @@
 #include "include/Corpus.h"
 
 using namespace std;
+map<string, int> Htest = generate();
 
 int main()
 {
-    /*
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
@@ -44,25 +44,31 @@ int main()
         }
 
         if (corpusCmd == "import") {
+            cout << "-Shuuseki: Please wait for a minute..." << endl;
             if (import(files) == -1) continue;
         }
 
         if (corpusCmd == "delete") {
+            cout << "-Shuuseki: Please wait for a minute..." << endl;
             if (remove(files) == -1) continue;
         }
 
         if (corpusCmd == "corpus") {
             scCorpusCmd = s.substr(mark + 1, s.size() - mark - 1);
             if (scCorpusCmd == "status") {
+                cout << "-Shuuseki: Please wait for a minute..." << endl;
                 if (show(corpusName) == -1) continue;
             } else {
                 cout << "-Shuuseki: " + scCorpusCmd + ": command not find" << endl;
             }
         }
+
+        if (corpusCmd == "sort") {
+            vector<string> options = split(s.substr(mark + 1, s.size() - mark - 1), " ");
+            cout << "-Shuuseki: Please wait for a minute..." << endl;
+            if (sort(options) == -1) continue;
+        }
     }
-     */
-    /*
-    sort(v.begin(), v.end(), zh_CN_less_than);
-    */
+
     return 0;
 }

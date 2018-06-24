@@ -330,6 +330,29 @@ int remove(const vector<string> &files) {
     return 0;
 }
 
+// Custom Functions for vector sorting
+// Sort by int
+struct IntCmp {
+    bool operator()(const pair<string, int> &lhs, const pair<string, int> &rhs)
+    {
+        return lhs.second > rhs.second;
+    }
+};
+
+// Sort by Pinyin
+map<string, int> HFKaiji = generate();
+struct AlpCmp {
+    bool operator()(const pair<string, int> &lhs, const pair<string, int> &rhs)
+    {
+        string lhsFirst = hex_to_string(string_to_hex(lhs.first).substr(0, 6)),
+                rhsFisrt = hex_to_string(string_to_hex(rhs.first).substr(0, 6));
+        if (HFKaiji[lhsFirst] && HFKaiji[rhsFisrt])
+            return HFKaiji[lhsFirst] < HFKaiji[rhsFisrt];
+        else
+            return false;
+    }
+};
+
 int show(const string &corpusName)
 {
     check();
@@ -388,11 +411,6 @@ int show(const string &corpusName)
     countOccurrence(kanji, wordOccurences);
 
     // Sort the map
-    struct IntCmp {
-        bool operator()(const pair<string, int> &lhs, const pair<string, int> &rhs) {
-            return lhs.second > rhs.second;
-        }
-    };
 
     vector<pair<string, int>> result(wordOccurences.begin(), wordOccurences.end());
 
@@ -406,8 +424,13 @@ int show(const string &corpusName)
     return 0;
 }
 
-int sort(const string &corpusName)
+int sort(vector<string> options)
 {
+    if (options.size() != 5 && options[0] != "-a" && options[0] != "-f") {
+        cerr << "-Shuuseki: missing options. Please input command [sort] with correct options." << endl;
+        return -1;
+    }
+
     check();
 
     fstream corpus(project + ".corpus");
@@ -422,6 +445,27 @@ int sort(const string &corpusName)
         vector<string> words = splitSentence(l);
         content.insert(content.end(), words.begin(), words.end());
     }
+
+    int n_min = stoi(options[1]), n_max = stoi(options[2]), f_min = stoi(options[3]), f_max = stoi(options[4]);
+
+    map<string, int> stringOccurrences = n_gram(n_min, n_max, content, f_min, f_max);
+    vector<pair<string, int>> result(stringOccurrences.begin(), stringOccurrences.end());
+
+    if (options[0] == "-f")
+        sort(result.begin(), result.end(), IntCmp());
+    else
+        sort(result.begin(), result.end(), AlpCmp());
+
+    ofstream out("recurrence.txt", ios_base::out | ios_base::app | ios_base::trunc);
+
+    out << " 频次" << "\t\t" << "字符串" <<endl;
+    for (auto &r : result) {
+        if (r.second >= f_min && r.second <= f_max)
+            out << " " << r.second << "\t\t" << r.first << endl;
+    }
+
+    out.close();
+    cout << "-Shuuseki: Finished!" << endl;
 
     return 0;
 }

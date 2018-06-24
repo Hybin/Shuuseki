@@ -206,4 +206,3 @@ int countOccurrence(vector<string> &kanji, map<string, int> &wordOccurrences)
 
     return 0;
 }
-

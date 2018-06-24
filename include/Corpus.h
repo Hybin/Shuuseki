@@ -53,7 +53,7 @@ int remove(const std::vector<std::string> &files);
 // Show corpus status
 int show(const std::string &corpusName);
 // Sort corpus
-int sort(const std::string &corpusName);
+int sort(std::vector<std::string> options);
 
 // encoding.cpp
 // Check the encoding of the contents
@@ -74,5 +74,6 @@ std::vector<std::string> getStringFromCorpus(std::fstream &in);
 std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines);
 std::vector<std::string> splitSentence(const std::string &s);
 std::map<std::string, int> n_gram(int &n_min, int &n_max, std::vector<std::string> content, int &f_min, int &f_max);
+std::map<std::string, int> generate();
 
 #endif //SHUUSEKI_CORPUS_H
