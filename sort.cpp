@@ -4,9 +4,22 @@
 
 #include <iostream>
 #include <regex>
+#include <locale>
 #include "include/Corpus.h"
 
 using namespace std;
+
+static const char *ZH_CN_LOCALE_STRING = "zh_CN.UTF-8";
+
+static const locale zh_CN_locale = locale(ZH_CN_LOCALE_STRING);
+
+static const collate<char> &zh_CN_collate = use_facet<collate<char>>(zh_CN_locale);
+
+bool zh_CN_less_than(const string &s1, const string &s2){
+    const char *pb1 = s1.data();
+    const char *pb2 = s2.data();
+    return (zh_CN_collate.compare(pb1, pb1+s1.size(), pb2, pb2+s2.size()) < 0);
+}
 
 vector<string> getStringFromCorpus(fstream &in)
 {
@@ -43,6 +56,7 @@ int clear(string &s, vector<string> &vec) {
     }
     return 0;
 }
+
 vector<string> splitSentence(const string &s)
 {
     vector<string> words, bytes;
@@ -105,3 +119,35 @@ vector<string> splitSentence(const string &s)
     return words;
 }
 
+string merge(vector<string> &vec)
+{
+    string s;
+    for (auto &i : vec) {
+        s += i;
+    }
+
+    return s;
+}
+
+map<string, int> n_gram(int &n_min, int &n_max, vector<string> content, int &f_min, int &f_max)
+{
+    map<string, int> stringOccurrences;
+    int p = 0;
+    while (p < content.size()) {
+        vector<string> varVector;
+        // Get the substring S from the string T
+        for (int i = p; i < p + n_max; ++i) {
+            varVector.push_back(content[i]);
+        }
+
+        while (varVector.size() >= n_min) {
+            ++stringOccurrences[merge(varVector)];
+            varVector.erase(varVector.begin() + varVector.size() - 1); // Delete the last charater
+        }
+
+        ++p;
+    }
+
+    return stringOccurrences;
+
+}

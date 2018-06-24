@@ -61,5 +61,8 @@ int main()
         }
     }
      */
+    /*
+    sort(v.begin(), v.end(), zh_CN_less_than);
+    */
     return 0;
 }

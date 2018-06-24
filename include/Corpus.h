@@ -52,6 +52,8 @@ int import(const std::vector<std::string> &files);
 int remove(const std::vector<std::string> &files);
 // Show corpus status
 int show(const std::string &corpusName);
+// Sort corpus
+int sort(const std::string &corpusName);
 
 // encoding.cpp
 // Check the encoding of the contents
@@ -67,9 +69,10 @@ int isutf8(const char *s, size_t ns);
 
 int transform(const std::string &file);
 
-// Nagao.cpp
+// Sort.cpp
 std::vector<std::string> getStringFromCorpus(std::fstream &in);
 std::vector<std::string> removeEmptyLines(std::vector<std::string> &lines);
 std::vector<std::string> splitSentence(const std::string &s);
+std::map<std::string, int> n_gram(int &n_min, int &n_max, std::vector<std::string> content, int &f_min, int &f_max);
 
 #endif //SHUUSEKI_CORPUS_H

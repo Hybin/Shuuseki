@@ -67,12 +67,18 @@ int open(const string &corpusName)
     return 0;
 }
 
-int import(const vector<string> &files)
+int check()                // Check if a Corpus has been opened or created
 {
     if (project.empty()) {
         cerr << "-Shuuseki: Caution: You may need to create a Corpus or open one" << endl;
         return -1;
     }
+    return 0;
+}
+
+int import(const vector<string> &files)
+{
+    check();
 
     fstream imported_corpus(project + ".corpus", ios_base::out | ios_base::in | ios_base::app | ios_base::ate);
     if (!imported_corpus) {
@@ -178,10 +184,7 @@ int import(const vector<string> &files)
 }
 
 int remove(const vector<string> &files) {
-    if (project.empty()) {
-        cerr << "-Shuuseki: Caution: You may need to create a Corpus or open one" << endl;
-        return -1;
-    }
+    check();
 
     ifstream corpus(project + ".corpus");
     if (!corpus) {
@@ -329,10 +332,7 @@ int remove(const vector<string> &files) {
 
 int show(const string &corpusName)
 {
-    if (project.empty()) {
-        cerr << "-Shuuseki: Caution: You may need to create a Corpus or open one" << endl;
-        return -1;
-    }
+    check();
 
     fstream corpus(project + ".corpus");
     if (!corpus) {
@@ -402,6 +402,26 @@ int show(const string &corpusName)
         cout << "  " << result[i].first << " occurs " << result[i].second << ((result[i].second > 1) ? " times" : " time") << endl;
     }
 
+
+    return 0;
+}
+
+int sort(const string &corpusName)
+{
+    check();
+
+    fstream corpus(project + ".corpus");
+    if (!corpus) {
+        cerr << "-Shuuseki: corpus not exist" << endl;
+        return -1;
+    }
+
+    vector<string> lines = getStringFromCorpus(corpus), sentences = removeEmptyLines(lines), content;
+
+    for (auto &l : sentences) {
+        vector<string> words = splitSentence(l);
+        content.insert(content.end(), words.begin(), words.end());
+    }
 
     return 0;
 }
