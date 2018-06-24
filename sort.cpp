@@ -59,11 +59,12 @@ vector<string> splitSentence(const string &s)
                         "efbc88", "efbc89", "efb999", "efb99a", "efbc8c", "e38081", "e38082", "efbc8e", "efbc9b", "efbc9a",
                         "efbc9f", "efbc81", "e3808a", "e3808b", "e28098", "e28099", "e2809c", "e2809d", "e29480", "e280a6",
                         "e38080", "e38090", "e38091", "efbc8d", "efb9a3", "e28094", "20"},
-                cNda = {"efbca1", "efbca2", "efbca3", "efbca4", "efbca5", "efbca6", "efbca7", "efbca8", "efbca9", "efbcaa", "efbcab", "efbcac", "efbcad",
-                        "efbcae", "efbcaf", "efbcb0", "efbcb1", "efbcb2", "efbcb3", "efbcb4", "efbcb5", "efbcb6", "efbcb7", "efbcb8", "efbcb9", "efbcba",
-                        "efbd81", "efbd82", "efbd83", "efbd84", "efbd85", "efbd86", "efbd87", "efbd88", "efbd89", "efbd8a", "efbd8b", "efbd8c", "efbd8d",
-                        "efbd8e", "efbd8f", "efbd90", "efbd91", "efbd92", "efbd93", "efbd94", "efbd95", "efbd96", "efbd97", "efbd98", "efbd99", "efbd9a",
-                        "efbc90", "efbc91", "efbc92", "efbc93", "efbc94", "efbc95", "efbc96", "efbc97", "efbc98", "efbc99"};
+                cNda = {"efbca1", "efbca2", "efbca3", "efbca4", "efbca5", "efbca6", "efbca7", "efbca8", "efbca9", "efbcaa", "efbcab",
+                        "efbcac", "efbcad", "efbcae", "efbcaf", "efbcb0", "efbcb1", "efbcb2", "efbcb3", "efbcb4", "efbcb5", "efbcb6",
+                        "efbcb7", "efbcb8", "efbcb9", "efbcba", "efbd81", "efbd82", "efbd83", "efbd84", "efbd85", "efbd86", "efbd87",
+                        "efbd88", "efbd89", "efbd8a", "efbd8b", "efbd8c", "efbd8d", "efbd8e", "efbd8f", "efbd90", "efbd91", "efbd92",
+                        "efbd93", "efbd94", "efbd95", "efbd96", "efbd97", "efbd98", "efbd99", "efbd9a", "efbc90", "efbc91", "efbc92",
+                        "efbc93", "efbc94", "efbc95", "efbc96", "efbc97", "efbc98", "efbc99"};
 
     int i = 0;
     while (i < bytes.size()) {

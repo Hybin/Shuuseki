@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <time.h>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -7,6 +8,7 @@ map<string, int> Htest = generate();
 
 int main()
 {
+    /*
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
@@ -69,6 +71,23 @@ int main()
             if (sort(options) == -1) continue;
         }
     }
+     */
+    clock_t start, finish;
+    double totaltime;
+    start = clock();
+
+    fstream raw("Jumoku.corpus", ios_base::in);
+    vector<string> lines = getStringFromCorpus(raw), sentences = removeEmptyLines(lines), characters;
+
+    for (auto &l : sentences) {
+        vector<string> words = splitSentence(l);
+        characters.insert(characters.end(), words.begin(), words.end());
+    }
+
+    cout << "finish" << endl;
+    finish = clock();
+    totaltime = (double)(finish-start)/CLOCKS_PER_SEC;
+    cout << "\n此程序的运行时间为"<< totaltime <<"秒！"<< endl;
 
     return 0;
 }

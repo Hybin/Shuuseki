@@ -75,7 +75,7 @@ int check()                // Check if a Corpus has been opened or created
     }
     return 0;
 }
-
+/*
 int import(const vector<string> &files)
 {
     check();
@@ -181,6 +181,52 @@ int import(const vector<string> &files)
     cout << "-Shuuseki: Your data has been imported " + to_string(count) + " files " + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
 
     return 0;
+}*/
+int import(const vector<string> &files)
+{
+    check();
+
+    ifstream imported_corpus_config(project + ".config", ios_base::in);
+    if (!imported_corpus_config) {
+        cerr << "-Shuuseki: corpus_config not exist" << endl;
+        return -1;
+    }
+
+    // Create an Object to store the information.
+    Corpus Shuuseki;
+    vector<string> basic_info = readCorpusInfo(imported_corpus_config);
+
+    Shuuseki.CorpusName = basic_info[3];
+    if (basic_info[7] != "0" )
+        Shuuseki.FileList = split(basic_info[7], ",");
+    else
+        Shuuseki.FileList = {};
+
+    imported_corpus_config.close();
+
+    for (auto &file : files) {
+        // Test if it has existed
+        if (match(Shuuseki.FileList, file) != -1) {
+            cerr << "-Shuuseki: The file [" + file + "] has existed." << endl;
+            continue;
+        }
+
+        fstream in(file);
+
+        if (!in) {
+            cerr << "File [" + file + "] not exist" << endl;
+            continue;
+        }
+
+        string encoding = checkEncoding(file);
+
+        if ((encoding != "UTF-8") && (encoding != "UTF-8 with BOM")) {
+            transform(file);
+
+            fstream raw("convert-output.txt", ios_base::in);
+            vector<string> lines = getStringFromCorpus(raw), sentences = removeEmptyLines(lines), characters;
+        }
+    }
 }
 
 int remove(const vector<string> &files) {
@@ -451,14 +497,15 @@ int sort(vector<string> options)
     map<string, int> stringOccurrences = n_gram(n_min, n_max, content, f_min, f_max);
     vector<pair<string, int>> result(stringOccurrences.begin(), stringOccurrences.end());
 
-    if (options[0] == "-f")
-        sort(result.begin(), result.end(), IntCmp());
-    else
-        sort(result.begin(), result.end(), AlpCmp());
-
     ofstream out("recurrence.txt", ios_base::out | ios_base::app | ios_base::trunc);
+    if (options[0] == "-f") {
+        sort(result.begin(), result.end(), IntCmp());
+        out << " 频次" << "\t\t" << "字符串" << endl;
+    } else {
+        sort(result.begin(), result.end(), AlpCmp());
+        out << " 字符串" << "\t\t" << "频次" << endl;
+    }
 
-    out << " 频次" << "\t\t" << "字符串" <<endl;
     for (auto &r : result) {
         if (r.second >= f_min && r.second <= f_max)
             out << " " << r.second << "\t\t" << r.first << endl;
