@@ -40,6 +40,7 @@ std::string hex_to_string(const std::string &input);
 // std::string clean(std::string &s, std::string &r);
 int countOccurrence(std::vector<std::string> &kanji, std::map<std::string, int> &wordOccurrences);
 unsigned long countKanji(std::vector<std::string> &kanji);
+std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> preprocessing(std::fstream &in, const std::string &file);
 
 // operations.cpp
 // Create a new Corpus

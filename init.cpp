@@ -194,6 +194,23 @@ string hex_to_string(const string& input)
     return output;
 }
 
+map<string, map<string, vector<vector<int>>>> preprocessing(fstream &in, const string &file)
+{
+    map<string, map<string, vector<vector<int>>>> inventory;
+
+    // Read the characters from file
+    using line_no = int;
+    vector<string> lines = getStringFromCorpus(in), sentences = removeEmptyLines(lines);
+    vector<pair<string, line_no>> characters;
+    for (int i = 0; i < sentences.size(); ++i) {
+        vector<string> words = splitSentence(sentences[i]);
+        for (int j = 0; j < words.size(); ++j)
+            inventory[file][words[j]].push_back({i, j});    // filename - kanji - line_no - char_no
+    }
+
+    return inventory;
+}
+
 unsigned long countKanji(vector<string> &kanji)
 {
     return kanji.size();

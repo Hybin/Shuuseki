@@ -192,6 +192,8 @@ int import(const vector<string> &files)
         return -1;
     }
 
+    cout << "-Shuuseki: Please wait for a minute..." << endl;
+
     // Create an Object to store the information.
     Corpus Shuuseki;
     vector<string> basic_info = readCorpusInfo(imported_corpus_config);
@@ -203,6 +205,15 @@ int import(const vector<string> &files)
         Shuuseki.FileList = {};
 
     imported_corpus_config.close();
+
+    fstream imported_corpus(project + ".corpus", ios_base::out | ios_base::in | ios_base::app | ios_base::ate);
+    if (!imported_corpus) {
+        cerr << "-Shuuseki: corpus not exist" << endl;
+        return -1;
+    }
+
+    // Make a record of the number of imported files
+    int count = 0;
 
     for (auto &file : files) {
         // Test if it has existed
@@ -220,13 +231,40 @@ int import(const vector<string> &files)
 
         string encoding = checkEncoding(file);
 
+        map<string, map<string, vector<vector<int>>>> inventory;
+
         if ((encoding != "UTF-8") && (encoding != "UTF-8 with BOM")) {
             transform(file);
 
             fstream raw("convert-output.txt", ios_base::in);
-            vector<string> lines = getStringFromCorpus(raw), sentences = removeEmptyLines(lines), characters;
+            inventory = preprocessing(raw, file);
+            raw.close();
+
+            remove("convert-output.txt");
+        } else {
+            inventory = preprocessing(in, file);
+            in.close();
         }
+
+        map<string, map<string, vector<vector<int>>>>::iterator item;
+
+        for (item = inventory.begin(); item != inventory.end(); ++item)
+            for (auto & c : item -> second)
+                for (auto &i : c.second)
+                    imported_corpus << item -> first << "-" << c.first << "-" << i[0] << "-" << i[1] << endl;
+
+        Shuuseki.FileList.push_back(file);
+        ++count;
     }
+
+    ofstream updated_corpus_config(project + ".config", ios_base::out | ios_base::trunc);
+    updated_corpus_config << "Corpus Name = " << Shuuseki.CorpusName << " ;";
+    updated_corpus_config << "Corpus FileList = " << vector2string(Shuuseki.FileList) << " ;";
+    updated_corpus_config.close();
+
+    cout << "-Shuuseki: Your data has been imported " + to_string(count) + " files " + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
+
+    return 0;
 }
 
 int remove(const vector<string> &files) {
