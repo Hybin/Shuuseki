@@ -65,7 +65,7 @@ int main()
             }
         }
 
-        if (corpusCmd == "sort") {
+        if (corpusCmd == "count") {
             vector<string> options = split(s.substr(mark + 1, s.size() - mark - 1), " ");
             if (count(options) == -1) continue;
         }

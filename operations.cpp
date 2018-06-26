@@ -26,21 +26,16 @@ int create(const string &corpusName)
     fstream init("corpora.index", ios_base::out | ios_base::in | ios_base::app);
     init << Shuuseki.CorpusName + "\n";
 
-    // Store the data of the Corpus
+    init.close();
+
+    // Create a file for the Corpus
     fstream corpus;
     corpus.open(corpusName + ".corpus", ios_base::out | ios_base::in | ios_base::app);
-
-    ofstream corpus_config;
-    corpus_config.open(corpusName + ".config", ios_base::out | ios_base::app);
-    corpus_config << "Corpus Name = " << Shuuseki.CorpusName << " ;";
-    corpus_config << "Corpus FileList = " << "0" << " ; ";
-
-    corpus_config.close();
 
     if (!corpus) {
         cerr << "-Shuuseki: Failed to create a corpus" << endl;
     }
-
+    corpus.close();
     // Show status
     cout << "-Shuuseki: A corpus called [" + corpusName + "] has been created successful" << endl;
 
@@ -74,7 +69,7 @@ int open(const string &corpusName)
 
 int check()                // Check if a Corpus has been opened or created
 {
-    if (indexes.empty()) {
+    if (project.empty()) {
         cerr << "-Shuuseki: Caution: You may need to create a Corpus or open one" << endl;
         return -1;
     }
@@ -84,12 +79,6 @@ int check()                // Check if a Corpus has been opened or created
 int import(const vector<string> &files)
 {
     check();
-
-    ifstream imported_corpus_config(project + ".config", ios_base::in);
-    if (!imported_corpus_config) {
-        cerr << "-Shuuseki: corpus_config not exist" << endl;
-        return -1;
-    }
 
     cout << "-Shuuseki: Please wait for a minute..." << endl;
 
@@ -147,6 +136,8 @@ int import(const vector<string> &files)
         Shuuseki.FileList.push_back(file);
         ++count;
     }
+
+    imported_corpus.close();
 
     cout << "-Shuuseki: Your data has been imported " + to_string(count) + " files " + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
 
@@ -209,11 +200,24 @@ struct AlpCmp {
     bool operator()(const pair<string, int> &lhs, const pair<string, int> &rhs)
     {
         string lhsFirst = hex_to_string(string_to_hex(lhs.first).substr(0, 6)),
-                rhsFisrt = hex_to_string(string_to_hex(rhs.first).substr(0, 6));
-        if (HFKaiji[lhsFirst] && HFKaiji[rhsFisrt])
+               rhsFisrt = hex_to_string(string_to_hex(rhs.first).substr(0, 6));
+        if ((HFKaiji.find(lhsFirst) != HFKaiji.end()) && (HFKaiji.find(rhsFisrt) != HFKaiji.end()))
             return HFKaiji[lhsFirst] < HFKaiji[rhsFisrt];
         else
             return false;
+    }
+};
+
+// Complex sort: 1) base on line_no; 2) base on character_no;
+struct CompIntCmp {
+    bool operator()(const pair<string, vector<int>> &lhs, const pair<string, vector<int>> &rhs)
+    {
+        if (lhs.second[0] < rhs.second[0])
+            return true;
+        else if (lhs.second[0] == rhs.second[0])
+            return lhs.second[1] < rhs.second[1];
+
+        return false;
     }
 };
 
@@ -269,25 +273,33 @@ int count(vector<string> options)
 
     cout << "-Shuuseki: Please wait for a minute..." << endl;
 
-    fstream corpus(project + ".corpus");
-    if (!corpus) {
-        cerr << "-Shuuseki: corpus not exist" << endl;
-        return -1;
+    vector<string> content;
+    vector<pair<string, vector<int>>> sentences;
+    map<string, map<string, vector<vector<int>>>>::iterator item;
+    for (item = indexes.begin(); item != indexes.end(); ++item) {
+        vector<pair<string, vector<int>>> kanji;
+        for (auto & c : item -> second)
+            for (auto &i : c.second)
+                kanji.emplace_back(c.first, i);
+
+        sort(kanji.begin(), kanji.end(), CompIntCmp());
+        sentences.insert(sentences.end(), kanji.begin(), kanji.end());
     }
 
-    vector<string> lines = getStringFromCorpus(corpus), sentences = removeEmptyLines(lines), content;
+    for (auto &sentence : sentences)
+        content.push_back(sentence.first);
 
-    for (auto &l : sentences) {
-        vector<string> words = splitSentence(l);
-        content.insert(content.end(), words.begin(), words.end());
-    }
 
     int n_min = stoi(options[1]), n_max = stoi(options[2]), f_min = stoi(options[3]), f_max = stoi(options[4]);
 
     map<string, int> stringOccurrences = n_gram(n_min, n_max, content, f_min, f_max);
-    vector<pair<string, int>> result(stringOccurrences.begin(), stringOccurrences.end());
+    vector<pair<string, int>> temp(stringOccurrences.begin(), stringOccurrences.end()), result;
 
-    ofstream out("recurrence.txt", ios_base::out | ios_base::app | ios_base::trunc);
+    for (auto &t : temp)
+        if (t.second >= f_min && t.second <= f_max)
+            result.push_back(t);
+
+    ofstream out("recurrence.txt", ios_base::out | ios_base::trunc);
     if (options[0] == "-f") {
         sort(result.begin(), result.end(), IntCmp());
         out << " 频次" << "\t\t" << "字符串" << endl;
@@ -297,11 +309,11 @@ int count(vector<string> options)
     }
 
     for (auto &r : result) {
-        if (r.second >= f_min && r.second <= f_max)
             out << " " << r.second << "\t\t" << r.first << endl;
     }
 
     out.close();
+
     cout << "-Shuuseki: Finished!" << endl;
 
     return 0;

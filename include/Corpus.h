@@ -26,20 +26,14 @@ public:
 //init.cpp
 int initialize();
 bool check(const std::string &s);
-std::vector<std::string> readCorpusInfo(std::ifstream &in);
 std::vector<std::string> split(const std::string  &s, std::string token);
-std::string vector2string(std::vector<std::string> vec);
-std::vector<std::string> getAbsIndice(std::vector<std::string> &src);
-std::vector<std::vector<std::string>> getConIndice(std::vector<std::string> &src);
 int match(std::vector<std::string> &src, const std::string &s);
 std::string &rtrim(std::string &s);
 std::string &trim(std::string &s);
 std::string &ltrim(std::string &s);
 std::string string_to_hex(const std::string &input);
 std::string hex_to_string(const std::string &input);
-// std::string clean(std::string &s, std::string &r);
 int countOccurrence(std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> inventory, std::map<std::string, int> &wordOccurrences);
-unsigned long countKanji(std::vector<std::string> &kanji);
 std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> preprocessing(std::fstream &in, const std::string &file);
 int writeIndiceIntoCorpus(std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> &inventory, std::fstream &out);
 std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> getDataFromCorpus(std::fstream &in);
