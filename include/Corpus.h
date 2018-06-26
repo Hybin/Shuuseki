@@ -49,8 +49,10 @@ int import(const std::vector<std::string> &files);
 int remove(const std::vector<std::string> &files);
 // Show corpus status
 int show(const std::string &corpusName);
-// Sort corpus
+// Count frequency corpus
 int count(std::vector<std::string> options);
+// Search in corpus
+int search(std::vector<std::string> options);
 
 // encoding.cpp
 // Check the encoding of the contents

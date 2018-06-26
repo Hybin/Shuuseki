@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <regex>
-#include <locale>
 #include "include/Corpus.h"
 
 using namespace std;

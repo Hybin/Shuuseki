@@ -25,6 +25,7 @@ int main()
     cout << "To avoid Stack Overflow, if your file with encoding (~UTF-8), it is better to save it with encoding UTF-8 and import it." << "\n" <<endl;
 
     string s;
+    vector<string> commands = {"create", "open", "import", "delete", "corpus", "count", "search"};
     while (true) {
         cout << ">>> ";
         getline(cin, s);
@@ -37,6 +38,11 @@ int main()
         }
 
         string corpusCmd = s.substr(0, mark), fileName, corpusName, scCorpusCmd;
+        if (match(commands, corpusCmd) == -1) {
+            cerr << "-Shuuseki: " + s + ": command not find" << endl;
+            continue;
+        }
+
         vector<string> files;
         if (corpusCmd == "create" || corpusCmd == "open")
             corpusName = s.substr(mark + 1, s.size() - mark - 1);
@@ -69,6 +75,11 @@ int main()
         if (corpusCmd == "count") {
             vector<string> options = split(s.substr(mark + 1, s.size() - mark - 1), " ");
             if (count(options) == -1) continue;
+        }
+
+        if (corpusCmd == "search") {
+            vector<string> options = split(s.substr(mark + 1, s.size() - mark - 1), " ");
+            if (search(options) == -1) continue;
         }
     }
 

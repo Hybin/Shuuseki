@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -273,6 +274,7 @@ int count(vector<string> options)
 
     cout << "-Shuuseki: Please wait for a minute..." << endl;
 
+    // Get characters from indexes and rebuild into sentences
     vector<string> content;
     vector<pair<string, vector<int>>> sentences;
     map<string, map<string, vector<vector<int>>>>::iterator item;
@@ -286,10 +288,11 @@ int count(vector<string> options)
         sentences.insert(sentences.end(), kanji.begin(), kanji.end());
     }
 
+    content.reserve(sentences.size());
     for (auto &sentence : sentences)
         content.push_back(sentence.first);
 
-
+    // n_gram string frequency statistic
     int n_min = stoi(options[1]), n_max = stoi(options[2]), f_min = stoi(options[3]), f_max = stoi(options[4]);
 
     map<string, int> stringOccurrences = n_gram(n_min, n_max, content, f_min, f_max);
@@ -315,6 +318,111 @@ int count(vector<string> options)
     }
 
     out.close();
+
+    cout << "-Shuuseki: Finished!" << endl;
+
+    return 0;
+}
+
+// Just for search
+string merge(vector<pair<string, vector<int>>> sentence, const int &start, const int &length)
+{
+    string s;
+    for (int i = start; i < (length + start); ++i) {
+        s += sentence[i].first;
+    }
+    return s;
+}
+
+string complete(string &serial)
+{
+    while (serial.size() < 7)
+        serial = "0" + serial;
+
+    return serial;
+}
+
+int search(vector<string> options)
+{
+    if (options.size() != 4) {
+        cerr << "-Shuuseki: missing options. Please input command [sort] with correct options." << endl;
+        return -1;
+    }
+
+    check();
+
+    cout << "-Shuuseki: Please wait for a minute..." << endl;
+
+    string source = options[0], goal = options[3];
+    int rangeMin = stoi(options[1]), rangeMax =stoi(options[2]);
+
+    vector<pair<string, vector<int>>> sentences;
+    map<string, map<string, vector<vector<int>>>>::iterator item;
+
+    vector<pair<int, string>> results;
+
+    for (item = indexes.begin(); item != indexes.end(); ++item) {
+        vector<pair<string, vector<int>>> kanji;
+        vector<vector<int>> anchor;
+        for (auto & c : item -> second)
+            for (auto &i : c.second)
+                kanji.emplace_back(c.first, i);
+
+        sort(kanji.begin(), kanji.end(), CompIntCmp());
+
+        for (auto &it : kanji) {
+            if (it.first == source)
+                anchor.push_back({it.second[0], it.second[1]});
+        }
+
+        for (auto &a : anchor) {
+            vector<pair<string, vector<int>>> sentence;
+            for (auto &k : kanji) {
+                if (k.second[0] == a[0])
+                    sentence.push_back(k);
+            }
+
+            // Expand the length of the sentence
+            int end = a[1] + rangeMax + 1, start = a[1] + rangeMin + 1, increment = 1;
+            while (end > sentence.size()) {
+                for (auto &k : kanji) {
+                    if (k.second[0] == (a[0] + increment))
+                        sentence.push_back(k);
+                }
+                ++increment;
+            }
+
+            while (start <= end) {
+                if (sentence[start].first == goal) {
+                    string front = merge(sentence, 0, a[1]),
+                           middle = merge(sentence, a[1], start + 1 - a[1]),
+                           last = merge(sentence, start + 1, static_cast<int>(sentence.size() - start - 1));
+                    stringstream ss;
+                    ss << " from [" << (item -> first) << "]: "<< front << " *" << middle << "* " << last;
+                    results.emplace_back(a[0], ss.str());
+                    ++start;
+                } else {
+                    ++start;
+                }
+            }
+        }
+    }
+
+    ofstream out("results.txt", ios_base::out | ios_base::trunc);
+    out << "-------------------------------------" << endl;
+    if (!results.empty())
+        out << "+ " << results.size() << " sentences found and listed blow:" << endl;
+    else
+        out << "404 Not Found" << endl;
+    out << "-------------------------------------" << '\n' <<endl;
+
+    for (auto &r : results) {
+        string serial = to_string(r.first);
+        if (serial.size() < 7)
+            complete(serial);
+
+        out << "line " << serial << r.second << endl;
+    }
 
     cout << "-Shuuseki: Finished!" << endl;
 
