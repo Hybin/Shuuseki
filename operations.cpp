@@ -295,6 +295,8 @@ int count(vector<string> options)
     map<string, int> stringOccurrences = n_gram(n_min, n_max, content, f_min, f_max);
     vector<pair<string, int>> temp(stringOccurrences.begin(), stringOccurrences.end()), result;
 
+    // Reduce the number of elements which need to be sorted
+    // And it make sense
     for (auto &t : temp)
         if (t.second >= f_min && t.second <= f_max)
             result.push_back(t);

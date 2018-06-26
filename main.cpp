@@ -21,6 +21,7 @@ int main()
     cout << "   [import] [[file name]] [[file name]] [[...]]" << endl;
     cout << "   [delete] [[file name]] [[file name]] [[...]]" << endl;
     cout << "   [corpus] [status]" << endl;
+    cout << "   [count]  [-a | -f] [[n_gram_min]] [[n_gram_max]] [[frequency_min]] [[frequency_max]]" << endl;
     cout << "To avoid Stack Overflow, if your file with encoding (~UTF-8), it is better to save it with encoding UTF-8 and import it." << "\n" <<endl;
 
     string s;
