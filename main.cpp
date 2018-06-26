@@ -7,6 +7,7 @@ using namespace std;
 
 int main()
 {
+
     clock_t start, finish;
     double totaltime;
     start = clock();
@@ -52,14 +53,12 @@ int main()
         }
 
         if (corpusCmd == "delete") {
-            cout << "-Shuuseki: Please wait for a minute..." << endl;
             if (remove(files) == -1) continue;
         }
 
         if (corpusCmd == "corpus") {
             scCorpusCmd = s.substr(mark + 1, s.size() - mark - 1);
             if (scCorpusCmd == "status") {
-                cout << "-Shuuseki: Please wait for a minute..." << endl;
                 if (show(corpusName) == -1) continue;
             } else {
                 cout << "-Shuuseki: " + scCorpusCmd + ": command not find" << endl;
@@ -68,8 +67,7 @@ int main()
 
         if (corpusCmd == "sort") {
             vector<string> options = split(s.substr(mark + 1, s.size() - mark - 1), " ");
-            cout << "-Shuuseki: Please wait for a minute..." << endl;
-            if (sort(options) == -1) continue;
+            if (count(options) == -1) continue;
         }
     }
 

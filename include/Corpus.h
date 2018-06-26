@@ -38,9 +38,11 @@ std::string &ltrim(std::string &s);
 std::string string_to_hex(const std::string &input);
 std::string hex_to_string(const std::string &input);
 // std::string clean(std::string &s, std::string &r);
-int countOccurrence(std::vector<std::string> &kanji, std::map<std::string, int> &wordOccurrences);
+int countOccurrence(std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> inventory, std::map<std::string, int> &wordOccurrences);
 unsigned long countKanji(std::vector<std::string> &kanji);
 std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> preprocessing(std::fstream &in, const std::string &file);
+int writeIndiceIntoCorpus(std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> &inventory, std::fstream &out);
+std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> getDataFromCorpus(std::fstream &in);
 
 // operations.cpp
 // Create a new Corpus
@@ -54,7 +56,7 @@ int remove(const std::vector<std::string> &files);
 // Show corpus status
 int show(const std::string &corpusName);
 // Sort corpus
-int sort(std::vector<std::string> options);
+int count(std::vector<std::string> options);
 
 // encoding.cpp
 // Check the encoding of the contents

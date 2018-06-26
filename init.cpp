@@ -50,17 +50,6 @@ bool check(const string &s)
     return false;
 }
 
-vector<string> readCorpusInfo(ifstream &in) {
-    string info;
-    vector<string> inventory;
-
-    while (in >> info) {
-        inventory.push_back(info);
-    }
-
-    return inventory;
-}
-
 vector<string> split(const string &s, string token)
 {
     string::size_type index;
@@ -79,51 +68,6 @@ vector<string> split(const string &s, string token)
         }
     }
     return result;
-}
-
-string vector2string(vector<string> vec)
-{
-    string s;
-    for (auto &i : vec) {
-        s += i + ",";
-    }
-
-    return s;
-}
-
-vector<string> getAbsIndice(vector<string> &src)
-{
-
-    auto fileNum = static_cast<int>(src.size() / 11);      // Get the number of files you have imported
-    int iter = (fileNum - 1) * 11;
-
-    vector<string> absIndex;                                 // Get a list only with file names and a list including file names and indice
-    for (int i = 1; i <= (iter + 1); i += 11) {
-        absIndex.push_back(src[i]);                       // Get abstract Index
-    }
-
-    return absIndex;
-}
-
-vector<vector<string>> getConIndice(vector<string> &src)
-{
-    auto fileNum = static_cast<int>(src.size() / 11);      // Get the number of files you have imported
-    int iter = (fileNum - 1) * 11;
-
-    vector<vector<string>> conIndex;                         // Get a list only with file names and a list including file names and indice
-
-    for (int i = 1; i <= (iter + 1); i += 11) {
-        vector<string> atom;
-
-        atom.push_back(src[i]);                           // Get the file name
-        atom.push_back(src[i + 3]);                       // Get the index:begin
-        atom.push_back(src[i + 6]);                       // Get the index:end
-        atom.push_back(src[i + 9]);                       // Get the word count
-
-        conIndex.push_back(atom);                            // Get concrete Index
-    }
-
-    return conIndex;
 }
 
 int match(vector<string> &src, const string &s)
@@ -201,7 +145,6 @@ map<string, map<string, vector<vector<int>>>> preprocessing(fstream &in, const s
     // Read the characters from file
     using line_no = int;
     vector<string> lines = getStringFromCorpus(in), sentences = removeEmptyLines(lines);
-    vector<pair<string, line_no>> characters;
     for (int i = 0; i < sentences.size(); ++i) {
         vector<string> words = splitSentence(sentences[i]);
         for (int j = 0; j < words.size(); ++j)
@@ -211,15 +154,38 @@ map<string, map<string, vector<vector<int>>>> preprocessing(fstream &in, const s
     return inventory;
 }
 
-unsigned long countKanji(vector<string> &kanji)
+int writeIndiceIntoCorpus(map<string, map<string, vector<vector<int>>>> &inventory, fstream &out)
 {
-    return kanji.size();
+    map<string, map<string, vector<vector<int>>>>::iterator item;
+
+    for (item = inventory.begin(); item != inventory.end(); ++item)
+        for (auto & c : item -> second)
+            for (auto &i : c.second)
+                out << item -> first << "-" << c.first << "-" << i[0] << "-" << i[1] << endl;
+
+    return 0;
 }
 
-int countOccurrence(vector<string> &kanji, map<string, int> &wordOccurrences)
+map<string, map<string, vector<vector<int>>>> getDataFromCorpus(fstream &in)
 {
-    for (auto &i : kanji)
-        ++wordOccurrences[i];
+    map<string, map<string, vector<vector<int>>>> inventory;
+    vector<string> indexes = getStringFromCorpus(in);
+
+    for (auto &index : indexes) {
+        vector<string> record = split(index, "-");
+        inventory[record[0]][record[1]].push_back({stoi(record[2]), stoi(record[3])});
+    }
+
+    return inventory;
+};
+
+int countOccurrence(map<string, map<string, vector<vector<int>>>> inventory, map<string, int> &wordOccurrences)
+{
+    map<string, map<string, vector<vector<int>>>>::iterator item;
+    for (item = inventory.begin(); item != inventory.end(); ++item)
+        for (auto & c : item -> second)
+            for (auto &i : c.second)
+                ++wordOccurrences[c.first];
 
     return 0;
 }
