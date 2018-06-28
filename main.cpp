@@ -1,17 +1,11 @@
 #include <iostream>
 #include <cstring>
-#include <ctime>
 #include "include/Corpus.h"
 
 using namespace std;
 
 int main()
 {
-
-    clock_t start, finish;
-    double totaltime;
-    start = clock();
-
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;
@@ -22,6 +16,7 @@ int main()
     cout << "   [delete] [[file name]] [[file name]] [[...]]" << endl;
     cout << "   [corpus] [status]" << endl;
     cout << "   [count]  [-a | -f] [[n_gram_min]] [[n_gram_max]] [[frequency_min]] [[frequency_max]]" << endl;
+    cout << "   [search] [[character]] [[range_min]] [[range_max]] [[character]]" << endl;
     cout << "To avoid Stack Overflow, if your file with encoding (~UTF-8), it is better to save it with encoding UTF-8 and import it." << "\n" <<endl;
 
     string s;
@@ -83,10 +78,7 @@ int main()
         }
     }
 
-    cout << "finish" << endl;
-    finish = clock();
-    totaltime = (double)(finish-start)/CLOCKS_PER_SEC;
-    cout << "\n此程序的运行时间为"<< totaltime <<"秒！"<< endl;
+    cout << "You have exited successfully!" << endl;
 
     return 0;
 }
