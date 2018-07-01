@@ -53,8 +53,10 @@ int open(const string &corpusName)
     fstream corpus;
     corpus.open(corpusName + ".corpus", ios_base::in);
 
-    if (!corpus)
+    if (!corpus) {
         cerr << "-Shuuseki: Failed to open a corpus" << endl;
+        return -1;
+    }
 
     cout << "-Shuuseki: Please wait for a minute..." << endl;
 

@@ -47,8 +47,6 @@ set
 -
 functional
 -
-locale
--
 
 Z:/CLionProjects/Shuuseki/init.cpp
 iostream
@@ -73,6 +71,10 @@ Z:/CLionProjects/Shuuseki/include/Corpus.h
 Z:/CLionProjects/Shuuseki/operations.cpp
 iostream
 -
+vector
+-
+sstream
+-
 include/Corpus.h
 Z:/CLionProjects/Shuuseki/include/Corpus.h
 
@@ -80,8 +82,6 @@ Z:/CLionProjects/Shuuseki/sort.cpp
 iostream
 -
 regex
--
-locale
 -
 include/Corpus.h
 Z:/CLionProjects/Shuuseki/include/Corpus.h

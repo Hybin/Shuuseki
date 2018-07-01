@@ -43,7 +43,9 @@ int main()
             corpusName = s.substr(mark + 1, s.size() - mark - 1);
 
         if (corpusCmd == "create") create(corpusName);
-        if (corpusCmd == "open") open(corpusName);
+        if (corpusCmd == "open") {
+            if (open(corpusName) == -1) continue;
+        }
 
         if (corpusCmd == "import" || corpusCmd == "delete") {
             fileName = s.substr(mark + 1, s.size() - mark - 1);

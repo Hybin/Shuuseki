@@ -145,7 +145,7 @@ char * unicode_to_utf8(unsigned short unicode)
 int gbk_or_big5_2_utf8(char* in, const char* encoding)
 {
     CodeConverter cc = CodeConverter(encoding, "utf-8");
-    size_t outlen = static_cast<size_t>(strlen(in) * 2);
+    size_t outlen = strlen(in) * 3;
     char outbuf[outlen];
 
     ofstream out("convert-output.txt", ios_base::out | ios_base::ate);
@@ -161,22 +161,21 @@ int gbk_or_big5_2_utf8(char* in, const char* encoding)
 
 int transform(const string &file)
 {
-    string stats = checkEncoding(file);
+    string stats = checkEncoding(file), content;
 
     ifstream in(file, ios_base::binary | ios_base::ate);
     ofstream out("convert-output.txt", ios_base::out | ios_base::ate);
 
-    in.seekg(0, in.end);
+    in.seekg(0, ifstream::end);
     long long end_mark = in.tellg();
     in.seekg(0, ifstream::beg);
+
     auto *buffer = new char[end_mark];
 
     in.read(buffer, end_mark);
 
     if (stats == "GB码") gbk_or_big5_2_utf8(buffer, "gbk");
     if (stats == "Big5") gbk_or_big5_2_utf8(buffer, "big5");
-
-    delete[] buffer;
 
     if ((stats == "UTF-16BE") || (stats == "UTF-16LE")) {
         unsigned char c;
