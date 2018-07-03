@@ -36,6 +36,7 @@ vector<string> removeEmptyLines(vector<string> &lines)
 }
 
 // Split the sentences into vector<string>
+
 int clear(string &s, vector<string> &vec) {
     if (!s.empty()) {
         vec.push_back(hex_to_string(s));
@@ -48,9 +49,11 @@ vector<string> splitSentence(const string &s)
 {
     vector<string> words, bytes;
     string hex = string_to_hex(s), word, dora, cnDora;  // dora means digit or alphabet.
-    while (!hex.empty()) {
-        bytes.push_back(hex.substr(0, 2));
-        hex = hex.substr(2, hex.size() - 2);
+    for (int i = 0; (i + 1) < hex.size(); i += 2) {
+        string a, b;
+        a = hex[i];
+        b = hex[i + 1];
+        bytes.push_back(a + b);
     }
 
     set<string> SpeS = {"2e", "3a", "2c", "22", "3f", "2d", "21", "27", "60", "3c", "3e", "5b", "5d", "7b", "7d", "56", "5f",

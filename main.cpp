@@ -7,7 +7,6 @@ using namespace std;
 
 int main()
 {
-
     initialize();
 
     cout << "Build your own corpus! Shuuseki is a small system written by C++ to help you manage your own corpora." << endl;

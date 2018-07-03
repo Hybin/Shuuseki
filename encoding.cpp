@@ -176,7 +176,7 @@ int GBKorBig5toUTF8(const string &sentences, int codePage)
     subsStr = nullptr;
 
     ofstream out("convert-output.txt", ios_base::out | ios_base::app);
-    out << res;
+    out << res << endl;
     out.close();
     return 0;
 }
@@ -204,8 +204,10 @@ int transform(const string &file)
     fstream raw(file);
     vector<string> lines = getStringFromCorpus(raw), sentences = removeEmptyLines(lines);
     string s;
-    for (auto &sentence : sentences)
+    for (auto &sentence : sentences) {
         s += sentence;
+        s += '\n';
+    }
 
     if (stats == "GB码") GBKorBig5toUTF8(s, CP_ACP);
     if (stats == "Big5") GBKorBig5toUTF8(s, 950);

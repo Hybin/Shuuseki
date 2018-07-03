@@ -142,7 +142,7 @@ int import(const vector<string> &files)
 
     imported_corpus.close();
 
-    cout << "-Shuuseki: Your data has been imported " + to_string(count) + " files " + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
+    cout << "-Shuuseki: You have been imported " + to_string(count) + " files " + "into the Corpus [" + Shuuseki.CorpusName + "] successfully" << endl;
 
     return 0;
 }
@@ -243,10 +243,10 @@ int show(const string &corpusName)
         for (auto & c : item -> second)
             charactersNum += c.second.size();
 
-    cout << "- Shuuseki: In Corpus [" + Shuuseki.CorpusName + "], there are " + to_string(Shuuseki.FileList.size()) + " imported files, "
+    cout << "-Shuuseki: In Corpus [" + Shuuseki.CorpusName + "], there are " + to_string(Shuuseki.FileList.size()) + " imported files, "
          << "almost " + to_string(charactersNum) + " characters(Kanji or English words)." << endl;
 
-    cout << "  And later you will see the Kanji with top 20 occurrences. Please wait for a minute......(only if your Corpus is big)" << endl;
+    cout << " And later you will see the Kanji with top 20 occurrences. Please wait for a minute......(only if your Corpus is big)" << endl;
 
     // Count the occurrences of characters
     map<string, int> wordOccurrences;

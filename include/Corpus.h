@@ -16,6 +16,7 @@
 #include <map>
 #include <set>
 #include <functional>
+#include <locale>
 
 class Corpus {
 public:

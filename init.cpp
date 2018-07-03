@@ -6,6 +6,7 @@
 #include <functional>
 #include <cctype>
 #include <locale>
+#include <windows.h>
 #include "include/Corpus.h"
 
 using namespace std;
@@ -138,17 +139,35 @@ string hex_to_string(const string& input)
     return output;
 }
 
+string transFilename(const string &file)
+{
+    string res;
+    WCHAR *tempStr;
+    int n = MultiByteToWideChar(CP_ACP, 0, file.c_str(), -1, nullptr, 0);
+    tempStr = new WCHAR[n];
+    MultiByteToWideChar(CP_ACP, 0, file.c_str(), -1, tempStr, n);
+    n = WideCharToMultiByte(CP_UTF8, 0, tempStr, -1, nullptr, 0, nullptr, nullptr);
+    auto *subsStr = new char[n];
+    WideCharToMultiByte(CP_UTF8, 0, tempStr, -1, subsStr, n, nullptr, nullptr);
+    res = subsStr;
+    delete[] tempStr;
+    tempStr = nullptr;
+    delete[] subsStr;
+    subsStr = nullptr;
+    return res;
+}
+
 map<string, map<string, vector<vector<int>>>> preprocessing(fstream &in, const string &file)
 {
     map<string, map<string, vector<vector<int>>>> inventory;
-
+    string filename = transFilename(file);
     // Read the characters from file
     using line_no = int;
     vector<string> lines = getStringFromCorpus(in), sentences = removeEmptyLines(lines);
     for (int i = 0; i < sentences.size(); ++i) {
         vector<string> words = splitSentence(sentences[i]);
         for (int j = 0; j < words.size(); ++j)
-            inventory[file][words[j]].push_back({i, j});    // filename - kanji - line_no - char_no
+            inventory[filename][words[j]].push_back({i, j});    // filename - kanji - line_no - char_no
     }
 
     return inventory;

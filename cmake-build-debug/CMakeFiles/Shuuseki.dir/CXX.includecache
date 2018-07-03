@@ -49,6 +49,8 @@ set
 -
 functional
 -
+locale
+-
 
 Z:/CLionProjects/Shuuseki/init.cpp
 iostream
@@ -58,6 +60,8 @@ functional
 cctype
 -
 locale
+-
+windows.h
 -
 include/Corpus.h
 Z:/CLionProjects/Shuuseki/include/Corpus.h
