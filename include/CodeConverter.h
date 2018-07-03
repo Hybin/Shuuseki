@@ -7,7 +7,9 @@
 
 #include <iconv.h>
 #include <cstring>
+#include <windows.h>
 
+// If the system is Unix(Mac OS X or Linux), iconv makes it sense
 class CodeConverter {
 private:
     iconv_t cd;

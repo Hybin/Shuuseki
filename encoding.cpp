@@ -159,13 +159,36 @@ int gbk_or_big5_2_utf8(char* in, const char* encoding)
     return 0;
 }
 
+int GBKorBig5toUTF8(const string &sentences, int codePage)
+{
+    string res;
+    WCHAR *tempStr;
+    int n = MultiByteToWideChar(codePage, 0, sentences.c_str(), -1, nullptr, 0);
+    tempStr = new WCHAR[n];
+    MultiByteToWideChar(codePage, 0, sentences.c_str(), -1, tempStr, n);
+    n = WideCharToMultiByte(CP_UTF8, 0, tempStr, -1, nullptr, 0, nullptr, nullptr);
+    auto *subsStr = new char[n];
+    WideCharToMultiByte(CP_UTF8, 0, tempStr, -1, subsStr, n, nullptr, nullptr);
+    res = subsStr;
+    delete[] tempStr;
+    tempStr = nullptr;
+    delete[] subsStr;
+    subsStr = nullptr;
+
+    ofstream out("convert-output.txt", ios_base::out | ios_base::app);
+    out << res;
+    out.close();
+    return 0;
+}
+
 int transform(const string &file)
 {
     string stats = checkEncoding(file), content;
 
-    ifstream in(file, ios_base::binary | ios_base::ate);
+    // ifstream in(file, ios_base::binary | ios_base::ate);
     ofstream out("convert-output.txt", ios_base::out | ios_base::ate);
-
+    // if the system is Mac OS X or Linux
+    /*
     in.seekg(0, ifstream::end);
     long long end_mark = in.tellg();
     in.seekg(0, ifstream::beg);
@@ -176,9 +199,22 @@ int transform(const string &file)
 
     if (stats == "GB码") gbk_or_big5_2_utf8(buffer, "gbk");
     if (stats == "Big5") gbk_or_big5_2_utf8(buffer, "big5");
+    */
+    // else
+    fstream raw(file);
+    vector<string> lines = getStringFromCorpus(raw), sentences = removeEmptyLines(lines);
+    string s;
+    for (auto &sentence : sentences)
+        s += sentence;
+
+    if (stats == "GB码") GBKorBig5toUTF8(s, CP_ACP);
+    if (stats == "Big5") GBKorBig5toUTF8(s, 950);
 
     if ((stats == "UTF-16BE") || (stats == "UTF-16LE")) {
         unsigned char c;
+        ifstream in(file, ios_base::binary | ios_base::ate);
+        in.seekg(0, ifstream::end);
+        long long end_mark = in.tellg();
         in.seekg(0, ifstream::beg);
 
         while (in && in.tellg() != end_mark) {
@@ -195,9 +231,10 @@ int transform(const string &file)
             if (stats == "UTF-16BE") out << unicode_to_utf8(p);
             if (stats == "UTF-16LE") out << unicode_to_utf8(st);
         }
+        in.close();
     }
 
-    in.close();
+
     out.close();
 
     return 0;

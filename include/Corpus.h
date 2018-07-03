@@ -60,6 +60,7 @@ std::string is_utf8_or_utf8bom(const std::string &file);
 std::string is_unicode(const std::string &file);
 std::string is_gb_or_big5(const char * file);
 std::string checkEncoding(const std::string &file);
+int GBKorBig5toUTF8(const std::string &sentences, int codePage);
 
 // Transform various of encoding format into UTF-8
 char * unicode_to_utf8(unsigned short unicode);

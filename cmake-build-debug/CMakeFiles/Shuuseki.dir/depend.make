@@ -8,6 +8,7 @@ CMakeFiles/Shuuseki.dir/encoding.cpp.obj: ../include/Corpus.h
 CMakeFiles/Shuuseki.dir/init.cpp.obj: ../include/Corpus.h
 CMakeFiles/Shuuseki.dir/init.cpp.obj: ../init.cpp
 
+CMakeFiles/Shuuseki.dir/main.cpp.obj: ../include/CodeConverter.h
 CMakeFiles/Shuuseki.dir/main.cpp.obj: ../include/Corpus.h
 CMakeFiles/Shuuseki.dir/main.cpp.obj: ../main.cpp
 

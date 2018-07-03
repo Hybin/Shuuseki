@@ -23,6 +23,8 @@ iconv.h
 -
 cstring
 -
+windows.h
+-
 
 Z:/CLionProjects/Shuuseki/include/Corpus.h
 string
@@ -67,6 +69,8 @@ cstring
 -
 include/Corpus.h
 Z:/CLionProjects/Shuuseki/include/Corpus.h
+include/CodeConverter.h
+Z:/CLionProjects/Shuuseki/include/CodeConverter.h
 
 Z:/CLionProjects/Shuuseki/operations.cpp
 iostream
