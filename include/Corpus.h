@@ -38,6 +38,8 @@ int countOccurrence(std::map<std::string, std::map<std::string, std::vector<std:
 std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> preprocessing(std::fstream &in, const std::string &file);
 int writeIndiceIntoCorpus(std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> &inventory, std::fstream &out);
 std::map<std::string, std::map<std::string, std::vector<std::vector<int>>>> getDataFromCorpus(std::fstream &in);
+std::string transInput(const std::string &file);
+std::string transOutput(const std::string &output);
 
 // operations.cpp
 // Create a new Corpus

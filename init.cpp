@@ -139,13 +139,13 @@ string hex_to_string(const string& input)
     return output;
 }
 
-string transFilename(const string &file)
+string transInput(const string &input)
 {
     string res;
     WCHAR *tempStr;
-    int n = MultiByteToWideChar(CP_ACP, 0, file.c_str(), -1, nullptr, 0);
+    int n = MultiByteToWideChar(CP_ACP, 0, input.c_str(), -1, nullptr, 0);
     tempStr = new WCHAR[n];
-    MultiByteToWideChar(CP_ACP, 0, file.c_str(), -1, tempStr, n);
+    MultiByteToWideChar(CP_ACP, 0, input.c_str(), -1, tempStr, n);
     n = WideCharToMultiByte(CP_UTF8, 0, tempStr, -1, nullptr, 0, nullptr, nullptr);
     auto *subsStr = new char[n];
     WideCharToMultiByte(CP_UTF8, 0, tempStr, -1, subsStr, n, nullptr, nullptr);
@@ -157,10 +157,26 @@ string transFilename(const string &file)
     return res;
 }
 
+string transOutput(const string &output)
+{
+    int len = MultiByteToWideChar(CP_UTF8, 0, output.c_str(), -1, nullptr, 0);
+    wchar_t* wszGBK = new wchar_t[len+1];
+    memset(wszGBK, 0, len*2+2);
+    MultiByteToWideChar(CP_UTF8, 0, output.c_str(), -1, wszGBK, len);
+    len = WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, nullptr, 0, nullptr, nullptr);
+    char* szGBK = new char[len+1];
+    memset(szGBK, 0, len+1);
+    WideCharToMultiByte(CP_ACP, 0, wszGBK, -1, szGBK, len, nullptr, nullptr);
+    string strTemp(szGBK);
+    delete[] wszGBK;
+    delete[] szGBK;
+    return strTemp;
+}
+
 map<string, map<string, vector<vector<int>>>> preprocessing(fstream &in, const string &file)
 {
     map<string, map<string, vector<vector<int>>>> inventory;
-    string filename = transFilename(file);
+    string filename = transInput(file);
     // Read the characters from file
     using line_no = int;
     vector<string> lines = getStringFromCorpus(in), sentences = removeEmptyLines(lines);

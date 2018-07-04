@@ -163,14 +163,15 @@ int remove(const vector<string> &files)
     // Delete the content
     int count = 0, record = static_cast<int>(indexes.size());
     for (auto &file : files) {
-        int pos = match(Shuuseki.FileList, file);
+        string tfile = transInput(file);
+        int pos = match(Shuuseki.FileList, tfile);
         if (pos == -1) continue;
 
         map<string, map<string, vector<vector<int>>>>::iterator item;
-        item = indexes.find(file);
+        item = indexes.find(tfile);
 
         if (item != indexes.end())
-            indexes.erase(file);
+            indexes.erase(tfile);
 
         Shuuseki.FileList.erase(Shuuseki.FileList.begin() + pos);
         ++count;
@@ -183,7 +184,7 @@ int remove(const vector<string> &files)
         updated_corpus.close();
     }
 
-    cout << "-Shuuseki: You has delete " + to_string(count) + " files successfully from Corpus [" + Shuuseki.CorpusName + "]" << endl;
+    cout << "-Shuuseki: You have delete " + to_string(count) + " files successfully from Corpus [" + Shuuseki.CorpusName + "]" << endl;
 
     return 0;
 }
@@ -256,10 +257,10 @@ int show(const string &corpusName)
 
     vector<pair<string, int>> result(wordOccurrences.begin(), wordOccurrences.end());
 
-    partial_sort(result.begin(), result.begin() + 20, result.end(), IntCmp());
+    sort(result.begin(), result.end(), IntCmp());
 
     for (int i = 0; i < 20; ++i) {
-        cout << "  " << result[i].first << " occurs " << result[i].second << ((result[i].second > 1) ? " times" : " time") << endl;
+        cout << " " << transOutput(result[i].first) << " occurs " << result[i].second << ((result[i].second > 1) ? " times" : " time") << endl;
     }
 
     return 0;
@@ -309,11 +310,11 @@ int count(vector<string> options)
     ofstream out("recurrence.txt", ios_base::out | ios_base::trunc);
     if (options[0] == "-f") {
         sort(result.begin(), result.end(), IntCmp());
-        out << " 频次" << "\t\t" << "字符串" << endl;
     } else {
         sort(result.begin(), result.end(), AlpCmp());
-        out << " 字符串" << "\t\t" << "频次" << endl;
     }
+
+    out << " 频次" << "\t\t" << "字符串" << endl;
 
     for (auto &r : result) {
             out << " " << r.second << "\t\t" << r.first << endl;
@@ -321,7 +322,7 @@ int count(vector<string> options)
 
     out.close();
 
-    cout << "-Shuuseki: Finished!" << endl;
+    cout << "-Shuuseki: Finished! You could read the result in recurrence.txt. " << endl;
 
     return 0;
 }
@@ -355,7 +356,7 @@ int search(vector<string> options)
 
     cout << "-Shuuseki: Please wait for a minute..." << endl;
 
-    string source = options[0], goal = options[3];
+    string source = transInput(options[0]), goal = transInput(options[3]);
     int rangeMin = stoi(options[1]), rangeMax =stoi(options[2]);
 
     vector<pair<string, vector<int>>> sentences;
@@ -426,7 +427,7 @@ int search(vector<string> options)
         out << "line " << serial << r.second << endl;
     }
 
-    cout << "-Shuuseki: Finished!" << endl;
+    cout << "-Shuuseki: Finished! You could read the result in result.txt. " << endl;
 
     return 0;
 }
